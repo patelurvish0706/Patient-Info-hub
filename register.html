@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIMS - Register here.</title>
+    <link rel="stylesheet" href="style/navbar.css">
+</head>
+
+<body>
+    <nav>
+        <div id="nav-right">
+            <img src="src/logo.jpg" alt="PIMS" id="logoImg">
+            <nav-title id="pims">Patient Information Management System</nav-title>
+        </div>
+        <div id="nav-left">
+            <div id="buttons">
+                <div class="navbutton" onclick="redirectHome();">Home</div>
+                <div class="navbutton" onclick="redirectLogin();">Login</div>
+                <div class="navbutton" id="activePage" onclick="redirectRegister();">Register</div>
+                <div class="navbutton" onclick="redirectManage();">Manage</div>
+            </div>
+        </div>
+    </nav>
+
+    <footer>
+        <div id="feedback">
+            <div id="db-title">Suggest any updates and changes.</div>
+            <div id="feedgo" class="fade-in">
+                <input type="text" name="feedbackIn" id="feedbackIn" placeholder="Enter Your Feedback Here.">
+                <div id="sub-feedback">Submit</div>
+            </div>
+        </div>
+        <div id="copy">&copy; Patient Information Management System 2024-25.</div>
+    </footer>
+
+    <script src="script/redirect.js"></script>
+</body>
+
+</html>

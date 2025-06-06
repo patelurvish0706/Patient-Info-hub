@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIMS - Your Info Your Care</title>
+    <link rel="stylesheet" href="style/navbar.css">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+    <nav>
+        <div id="nav-right">
+            <img src="src/logo.jpg" alt="PIMS" id="logoImg">
+            <nav-title id="pims">Patient Information Management System</nav-title>
+        </div>
+        <div id="nav-left">
+            <div id="buttons">
+                <div class="navbutton" id="activePage" onclick="redirectHome();">Home</div>
+                <div class="navbutton" onclick="redirectLogin();">Login</div>
+                <div class="navbutton" onclick="redirectRegister();">Register</div>
+                <div class="navbutton" onclick="redirectManage();">Manage</div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="section1">
+        <div class="imageWrapper">
+            <img src="src/home.png" alt="home" id="homeImg">
+            <div id="filterfade"></div>
+            <div id="textContainer">
+                <h2>Your Health, Our Priority:<br>Seamless Patient Information<br>Management</h2>
+                <p>Patient Info Hub revolutionizes healthcare data management, offering secure, intuitive, and
+                    comprehensive tools for patients, doctors, and nurses. Experience streamlined appointments,
+                    accessible reports, and enhanced care coordination.</p>
+                <button id="getStarted" onclick="redirectLogin();">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="section2">
+        <div id="healthtitle">Transform Healthcare with<br>Intelligent Data Management</div>
+        <img src="src/home2.png" alt="home2" id="home2Img">
+    </section>
+
+    <section id="section3">
+        <h2>Comprehensive Features for Modern Healthcare</h2>
+        <p>Discover how Patient Info Hub streamlines operations, enhances patient care, and ensures data integrity with
+            its powerful set of tools.</p>
+        <div id="consContainer">
+            <div class="consBox">
+                <img src="src/sec3ico (1).png" class="con-ico" />
+                <div id="con-tit">Secure Data Management</div>
+                <div id="con-desc">Ensure patient confidentiality with robust encryption and access controls. Your data
+                    is always safe and compliant.</div>
+            </div>
+            <div class="consBox">
+                <img src="src/sec3ico (2).png" class="con-ico" />
+                <div id="con-tit">Seamless Appointment Scheduling</div>
+                <div id="con-desc">Easily book, reschedule, and manage appointments for patients and healthcare
+                    providers.</div>
+            </div>
+            <div class="consBox">
+                <img src="src/sec3ico (3).png" class="con-ico" />
+                <div id="con-tit">Comprehensive Health Reports</div>
+                <div id="con-desc">Access detailed patient reports, treatment histories, and diagnostic results
+                    instantly and securely.</div>
+            </div>
+            <div class="consBox">
+                <img src="src/sec3ico (4).png" class="con-ico" />
+                <div id="con-tit">Enhanced Patient Engagement</div>
+                <div id="con-desc">Empower patients with self-service options, personalized care insights, and seamless
+                    communication.</div>
+            </div>
+            <div class="consBox">
+                <img src="src/sec3ico (5).png" class="con-ico" />
+                <div id="con-tit">Streamlined Doctor Workflow</div>
+                <div id="con-desc">Intuitive tools designed to help doctors efficiently manage their daily patient
+                    interactions and records.</div>
+            </div>
+            <div class="consBox">
+                <img src="src/sec3ico (6).png" class="con-ico" />
+                <div id="con-tit">Efficient Nurse Operations</div>
+                <div id="con-desc">Support nurses in managing appointments, medications, patient intake, and daily care
+                    with ease.</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="section4">
+        <h2>Ready to Transform Your Healthcare Management?</h2>
+        <p>Experience the future of patient information with Patient Info Hub. Seamless, secure, and smart solutions
+            await.</p>
+        <button id="getStarted" onclick="redirectManage();">Get Started</button>
+
+    </section>
+
+    <footer>
+        <div id="feedback">
+            <div id="db-title">Suggest any updates and changes.</div>
+            <div id="feedgo" class="fade-in">
+                <input type="text" name="feedbackIn" id="feedbackIn" placeholder="Enter Your Feedback Here.">
+                <div id="sub-feedback">Submit</div>
+            </div>
+        </div>
+        <div id="copy">&copy; Patient Information Management System 2024-25.</div>
+    </footer>
+
+    <script src="script/redirect.js"></script>
+</body>
+
+</html>
