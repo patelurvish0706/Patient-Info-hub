@@ -29,7 +29,7 @@ nav {
     font-family: "Montserrat", sans-serif;
     justify-content: space-between;
     background-color: #fff;
-    padding: 10px 20px;
+    padding: 10px 30px;
     box-shadow: 0px 0px 3px #0003;
     /* font-size: 18px; */
     font-size: clamp(0.9rem, 1.2vw, 2rem);
@@ -76,7 +76,7 @@ footer {
 }
 
 #feedback {
-    margin: 50px 0;
+    margin: 50px 0 0;
     width: 50vw;
     display: flex;
     flex-direction: column;
@@ -124,8 +124,10 @@ footer {
 }
 
 #copy {
+    font-family: "Montserrat", sans-serif;
     display: flex;
     justify-content: center;
     font-size: 15px;
     font-weight: 300;
+    margin: 20px;
 }

@@ -35,3 +35,22 @@ function redirectRegister() {
 function redirectManage() {
     window.location.href = "manage.html";
 }
+
+// --------------------- Manage --- Admin Login ? Register ----------------------
+
+const adminLogin = document.getElementById("admin-login");
+const adminRegister = document.getElementById("admin-register");
+
+// adminLogin.style.display = "flex";
+function admin_Register() {
+    adminLogin.style.display = "none";
+    adminRegister.style.display = "flex";
+}
+
+// adminRegister.style.display = "flex";
+function admin_Login() {
+    adminRegister.style.display = "none";
+    adminLogin.style.display = "flex";
+}
+
+// -------------------- Login ---------------------
