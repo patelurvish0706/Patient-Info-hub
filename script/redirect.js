@@ -2,22 +2,6 @@
 const element = document.getElementById('pims');
 element.style.display = 'none';
 
-
-// function checkWidth() {
-//     const element = document.getElementById('pims');
-//     if (window.innerWidth < 700) {
-//         element.style.display = 'none';
-//     } else {
-//         element.style.display = 'flex';
-//     }
-// }
-
-// // Run on load
-// checkWidth();
-
-// // Run on resize
-// window.addEventListener('resize', checkWidth);
-
 // -------------- Page redirect Buttons with Activepage navigation ----------------
 
 function redirectHome() {
@@ -53,4 +37,17 @@ function admin_Login() {
     adminLogin.style.display = "flex";
 }
 
-// -------------------- Login ---------------------
+// -------------------- Manage --- Doctor Login ? Department ---------------------
+
+const doctorLogin = document.getElementById("doctor-login");
+const departmentLogin = document.getElementById("department-login");
+
+function deprt_Login() {
+    doctorLogin.style.display = "none";
+    departmentLogin.style.display = "flex";
+}
+
+function doctor_Login() {
+    departmentLogin.style.display = "none";
+    doctorLogin.style.display = "flex";
+}

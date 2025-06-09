@@ -7,6 +7,19 @@
     <title>PIMS - Manage Own System</title>
     <link rel="stylesheet" href="style/navbar.css">
     <link rel="stylesheet" href="style/form.css">
+    <style>
+        .content {
+            display: flex;
+        }
+
+        .sap {
+            height: 50vh;
+            width: 2px;
+            display: flex;
+            background-color: #0000001f;
+            align-self: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,44 +38,91 @@
         </div>
     </nav>
 
-    <section id="section1">
-        <div class="formContainer">
-            <img src="src/logo2.png" alt="PIMS" id="loginImg">
-            <p>Welcome, <b>Admin</b>. Let's Manage Hospital System</p>
+    <div class="content">
+        <section id="section1">
+            <div class="formContainer">
+                <img src="src/logo2.png" alt="PIMS" id="loginImg">
+                <p>Welcome, <b>Admin</b>. Let's Manage Hospital System</p>
 
-            <form action="" method="post" id="admin-login" style="display: flex;">
-                <h6>Admin Login</h6>
-                <label for="login-admin-email">Admin Email:</label>
-                <input type="text" name="login-admin-email" id="login-admin-email" placeholder="your-email00@gmail.com">
+                <form action="" method="post" id="admin-login" style="display: flex;">
+                    <h6>Admin Login</h6>
+                    <label for="login-admin-email">Admin Email:</label>
+                    <input type="text" name="login-admin-email" id="login-admin-email"
+                        placeholder="your-email00@gmail.com">
 
-                <label for="login-admin-password">Admin Password:</label>
-                <input type="password" name="login-admin-password" id="login-admin-password" placeholder="••••••••">
+                    <label for="login-admin-password">Admin Password:</label>
+                    <input type="password" name="login-admin-password" id="login-admin-password" placeholder="••••••••">
 
-                <button type="submit">Login As Admin</button>
+                    <button type="submit">Login As Admin</button>
 
-                <label for="">Not Registered? <div class="link" onclick="admin_Register()">Register as Admin.</div>
-                </label>
-                <label for="">Forgot Password? <div class="link">Get new Password</div></label>
-            </form>
+                    <label for="">Not Registered? <div class="link" onclick="admin_Register()">Register as Admin.</div>
+                    </label>
+                    <label for="">Forgot Password? <div class="link">Get new Password</div></label>
+                </form>
 
-            <form action="" method="post" id="admin-register" style="display: none;">
-                <h6>Admin Register</h6>
-                <label for="register-admin-email">Admin Email:</label>
-                <input type="text" name="register-admin-email" id="register-admin-email"
-                    placeholder="your-email00@gmail.com">
+                <form action="" method="post" id="admin-register" style="display: none;">
+                    <h6>Admin Register</h6>
+                    <label for="register-admin-email">Admin Email:</label>
+                    <input type="text" name="register-admin-email" id="register-admin-email"
+                        placeholder="your-email00@gmail.com">
 
-                <label for="register-admin-password">Admin Password:</label>
-                <input type="password" name="register-admin-password" id="register-admin-password" placeholder="••••••••">
+                    <label for="register-admin-password">Admin Password:</label>
+                    <input type="password" name="register-admin-password" id="register-admin-password"
+                        placeholder="••••••••">
 
-                <label for="register-admin-repassword">Re-Enter Password:</label>
-                <input type="password" name="register-admin-repassword" id="register-admin-repassword" placeholder="••••••••">
+                    <label for="register-admin-repassword">Re-Enter Password:</label>
+                    <input type="password" name="register-admin-repassword" id="register-admin-repassword"
+                        placeholder="••••••••">
 
-                <button type="submit">Register As Admin</button>
-                <label for="">Registered already? <div class="link" onclick="admin_Login()">Login as Admin.</div>
-                </label>
-            </form>
-        </div>
-    </section>
+                    <button type="submit">Register As Admin</button>
+                    <label for="">Registered already? <div class="link" onclick="admin_Login()">Login as Admin.</div>
+                    </label>
+                </form>
+            </div>
+        </section>
+
+        <div class="sap"></div>
+        
+        <section id="section1">
+            <div class="formContainer">
+                <img src="src/logo2.png" alt="PIMS" id="loginImg">
+                <p>Welcome, <b>Doctor</b>. Let's Manage Hospital System</p>
+
+                <form action="" method="post" id="doctor-login" style="display: flex;">
+                    <h6>Doctor Login</h6>
+                    <label for="login-doctor-email">Doctor Email:</label>
+                    <input type="text" name="login-doctor-email" id="login-doctor-email"
+                        placeholder="your-email00@gmail.com">
+
+                    <label for="login-doctor-password">Doctor Password:</label>
+                    <input type="password" name="login-doctor-password" id="login-doctor-password" placeholder="••••••••">
+
+                    <button type="submit">Login As Doctor</button>
+
+                    <label for="">Department Section ? <div class="link" onclick="deprt_Login()">Department Login</div>
+                    </label>
+                    <label for="">Forgot Password? <div class="link">Get new Password</div></label>
+                </form>
+
+                <form action="" method="post" id="department-login" style="display: none;">
+                    <h6>Desk Department Login</h6>
+                    <label for="login-deprt-email">Department Email:</label>
+                    <input type="text" name="login-deprt-email" id="login-deprt-email"
+                        placeholder="your-email00@gmail.com">
+
+                    <label for="login-deprt-password">Department Password:</label>
+                    <input type="password" name="login-deprt-password" id="login-deprt-password"
+                        placeholder="••••••••">
+
+                    <button type="submit">Register As Admin</button>
+                    <label for="">You are Doctor ? <div class="link" onclick="doctor_Login()">Login as Doctor.</div>
+                    </label>
+                </form>
+            </div>
+        </section>
+
+    </div>
+
 
     <div id="copy">&copy; Patient Information Management System 2024-25.</div>
 

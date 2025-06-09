@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+/* font-family: "Montserrat", sans-serif; */
+
+body {
+    font-family: "Montserrat", sans-serif;
+    width: 100vw;
+    height: 100vh;
+}
+
+#dashboardContainer {
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+#rightDashBar {
+    width: 20%;
+    box-shadow: 0px 2px 3px #0003;
+}
+
+#leftDataBar {
+    width: 80%;
+}
+
+/* RightSideBar */
+
+#buttonTray {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    gap: 5px;
+}
+
+.tabButton {
+    cursor: pointer;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    gap: 10px;
+}
+
+.tabButton:hover{
+    box-shadow: 0px 0px 3px #0000001d;
+}
+
+i{
+    font-size: 20px;
+    margin: 5px;
+}
+
+.active{
+    color: #fff;
+    background-color: #1E90FF;
+    box-shadow: 0px 0px 3px #0003;
+}
+
+/* Left Data bar */
+
+#leftDataBar{
+    margin: 10px;
+    box-shadow: 0px 0px 3px #0003;
+    padding: 20px;
+}
+
+/* ----- My Details ----- */
+
+h2{
+    margin: 10px 0;
+}
+
+p{
+    margin: 5px 0;
+}
+
+/* ----- My Appointments ----- */
+
+/* Tab buttons */
+
+#listApps{
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    gap: 5px;
+    margin: 5px 0;
+}
+
+.appTabNames{
+    border: 1px solid #1E90FF ;
+    background-color: #fff;
+    padding: 8px 40px;
+    border-radius: 5px;
+}
+
+.appTabNames:hover{
+    background-color: #1E90FF;
+    color: #fff;
+}
+
+/* appsContainer */
+
+#appsContainer{
+    /* background-color: lightblue; */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 8px;
+}
+
+#appBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 0px 3px #0003;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#appInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#dept-name{
+    font-weight: 500;
+    font-size: 18px;
+}
+
+#date-time{
+    display: flex;
+    flex-direction: row;
+    font-size: 18px;
+    font-weight: 500;
+    gap: 10px;
+}
+
