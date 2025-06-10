@@ -44,7 +44,7 @@
                 <img src="src/logo2.png" alt="PIMS" id="loginImg">
                 <p>Welcome, <b>Admin</b>. Let's Manage Hospital System</p>
 
-                <form action="" method="post" id="admin-login" style="display: flex;">
+                <form action="script/admin_login.php" method="post" id="admin-login" style="display: flex;">
                     <h6>Admin Login</h6>
                     <label for="login-admin-email">Admin Email:</label>
                     <input type="text" name="login-admin-email" id="login-admin-email"
@@ -53,17 +53,17 @@
                     <label for="login-admin-password">Admin Password:</label>
                     <input type="password" name="login-admin-password" id="login-admin-password" placeholder="••••••••">
 
-                    <button type="submit">Login As Admin</button>
+                    <button type="submit" onclick="validateAdminLog(event)">Login As Admin</button>
 
-                    <label for="">Not Registered? <div class="link" onclick="admin_Register()">Register as Admin.</div>
+                    <label>Not Registered? <div class="link" onclick="admin_Register()">Register as Admin.</div>
                     </label>
-                    <label for="">Forgot Password? <div class="link">Get new Password</div></label>
+                    <label>Forgot Password? <div class="link">Get new Password</div></label>
                 </form>
 
-                <form action="" method="post" id="admin-register" style="display: none;">
+                <form action="script/admin_register.php" method="post" id="admin-register" style="display: none;">
                     <h6>Admin Register</h6>
                     <label for="register-admin-email">Admin Email:</label>
-                    <input type="text" name="register-admin-email" id="register-admin-email"
+                    <input type="email" name="register-admin-email" id="register-admin-email"
                         placeholder="your-email00@gmail.com">
 
                     <label for="register-admin-password">Admin Password:</label>
@@ -74,6 +74,7 @@
                     <input type="password" name="register-admin-repassword" id="register-admin-repassword"
                         placeholder="••••••••">
 
+                    <!-- <button type="submit" onclick="validateAdminReg(event)" >Register As Admin</button> -->
                     <button type="submit">Register As Admin</button>
                     <label for="">Registered already? <div class="link" onclick="admin_Login()">Login as Admin.</div>
                     </label>
@@ -126,6 +127,7 @@
 
     <div id="copy">&copy; Patient Information Management System 2024-25.</div>
 
+    <script src="script/validate.js"></script>
     <script src="script/redirect.js"></script>
 </body>
 

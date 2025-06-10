@@ -64,6 +64,8 @@ i{
     margin: 10px;
     box-shadow: 0px 0px 3px #0003;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ----- My Details ----- */

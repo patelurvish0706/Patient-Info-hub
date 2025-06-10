@@ -51,3 +51,4 @@ function doctor_Login() {
     departmentLogin.style.display = "none";
     doctorLogin.style.display = "flex";
 }
+

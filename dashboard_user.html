@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        #trackAppointment{
+            flex-direction: column;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,7 +24,7 @@
         </div>
         <div id="nav-left">
             <div id="buttons">
-                <div class="navbutton" onclick="redirectHome();">Welcome, John Doe</div>
+                <div class="navbutton" onclick="redirectHome();">Welcome, User</div>
                 <div class="navbutton" id="activePage" onclick="redirectLogin();">Logout</div>
             </div>
         </div>
@@ -28,19 +33,19 @@
     <section id="dashboardContainer">
         <div id="rightDashBar">
             <div id="buttonTray">
-                <div class="tabButton active">
+                <div class="tabButton active" onclick="switchTabUser('myDetails');">
                     <i class="fas fa-user"></i>My Details
                 </div>
-                <div class="tabButton">
-                    <i class="fas fa-calendar-check"></i><span>Book Appointment</span>
+                <div class="tabButton" onclick="switchTabUser('BookAppoint');">
+                    <i class="fas fa-calendar-check"></i>Book Appointment
                 </div>
-                <div class="tabButton">
+                <div class="tabButton" onclick="switchTabUser('trackAppoint');">
                     <i class="fas fa-search-location"></i>Track Appointment
                 </div>
-                <div class="tabButton">
+                <div class="tabButton" onclick="switchTabUser('Reports');">
                     <i class="fas fa-file-medical-alt"></i>Reports
                 </div>
-                <div class="tabButton">
+                <div class="tabButton" onclick="switchTabUser('Prescrip');">
                     <i class="fas fa-prescription-bottle-alt"></i>Prescriptions
                 </div>
             </div>
@@ -48,7 +53,7 @@
 
         <div id="leftDataBar">
 
-            <div id="MyDetails" style="display: none;">
+            <div id="myDetails">
                 <form action="" method="post">
                     <h2>My Details</h2>
                     <p>You can change or modify you details as required.</p>
@@ -75,13 +80,13 @@
                         placeholder="01, Abc Street, XYZ Road, City. PINCODE" required>
 
                     <button type="submit">Save Details</button>
+                </form>
             </div>
 
-            <div id="bookAppointment" style="display: none;">
-                
+            <div id="bookAppointment">
             </div>
 
-            <div id="trackAppointment" style="display: none;">
+            <div id="trackAppointment">
                 <h2>My Appointments</h2>
                 <div id="listApps">
                     <div id="pendingApps" class="appTabNames">Pending</div>
@@ -118,14 +123,18 @@
                 </div>
             </div>
 
-            <div id="Reports" style="display: none;"></div>
+            <div id="reports"></div>
 
-            <div id="Prescriptions" style="display: none;"></div>
+            <div id="prescriptions"></div>
 
         </div>
     </section>
 
     <script src="script/dashboard.js"></script>
+    <script>
+        allUserHidden();
+        document.getElementById('myDetails').style.display = "flex"
+    </script>
 </body>
 
 </html>
