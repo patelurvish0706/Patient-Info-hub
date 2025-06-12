@@ -79,22 +79,20 @@ function switchTabUser(tab) {
     }
 }
 
-// LogOut
+// Logout
 
 function LogoutAdmin() {
-    // Redirect to PHP logout script
     window.location.href = "script/admin_logout.php";
+}
+
+function LogoutUser(){
+    window.location.href = "script/user_logout.php";
 }
 
 function dataUpdated() {
     switchTabAdmin('mngDprtmnt');
     alert('Your Department Information is updated successfully.');
 }
-
-// function showdefault(){
-//     document.getElementById('listDepts').style.backgroundColor = '#1E90FF';
-//     document.getElementById('listDepts').style.color = '#FFF';
-// }
 
 // ADDING and UPDATING -> DEPARTMENT
 

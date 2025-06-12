@@ -1,3 +1,22 @@
+<?php
+session_start();
+include 'script/db_connection.php';
+if (!isset($_SESSION['user_Id'])) {
+    header("Location: login.html");
+    exit;
+}
+
+$user_Id = $_SESSION['user_Id'];
+$userName = isset($_SESSION['user_Name']) ? $_SESSION['user_Name'] : "User";
+
+$sql = "SELECT * FROM user_details WHERE user_Id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_Id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +30,7 @@
     <link rel="stylesheet" href="style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        #trackAppointment{
+        #trackAppointment {
             flex-direction: column;
         }
     </style>
@@ -24,8 +43,8 @@
         </div>
         <div id="nav-left">
             <div id="buttons">
-                <div class="navbutton" onclick="redirectHome();">Welcome, User</div>
-                <div class="navbutton" id="activePage" onclick="redirectLogin();">Logout</div>
+                <div class="navbutton" onclick="redirectHome();">Welcome, <?= htmlspecialchars($user['user_Name']) ?></div>
+                <div class="navbutton" id="activePage" onclick="LogoutUser();">Logout</div>
             </div>
         </div>
     </nav>
@@ -54,30 +73,33 @@
         <div id="leftDataBar">
 
             <div id="myDetails">
-                <form action="" method="post">
+                <form action="script/user_update.php" method="post">
                     <h2>My Details</h2>
-                    <p>You can change or modify you details as required.</p>
+                    <p>You can change or modify your details as required.</p>
+
                     <label for="reg-user-name">Name:</label>
-                    <input type="text" name="reg-user-name" id="reg-user-name" placeholder="John Doe" required>
+                    <input type="text" name="reg-user-name" id="reg-user-name"
+                        value="<?= htmlspecialchars($user['user_Name']) ?>" required>
 
                     <label for="reg-user-dob">Date Of Birth:</label>
-                    <input type="date" name="reg-user-dob" id="reg-user-dob" required>
+                    <input type="date" name="reg-user-dob" id="reg-user-dob" value="<?= $user['user_DOB'] ?>" required>
 
                     <label for="reg-user-gender">Gender:</label>
                     <select name="reg-user-gender" id="reg-user-gender" required>
-                        <option value="" disabled selected>Select your gender</option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                        <option value="prefer_not_to_say">Prefer not to say</option>
+                        <option value="" disabled>Select your gender</option>
+                        <option value="male" <?= $user['user_Gender'] === 'male' ? 'selected' : '' ?>>Male</option>
+                        <option value="female" <?= $user['user_Gender'] === 'female' ? 'selected' : '' ?>>Female</option>
+                        <option value="other" <?= $user['user_Gender'] === 'other' ? 'selected' : '' ?>>Other</option>
+                        <option value="prefer_not_to_say" <?= $user['user_Gender'] === 'prefer_not_to_say' ? 'selected' : '' ?>>Prefer not to say</option>
                     </select>
 
                     <label for="reg-user-phone">Phone:</label>
-                    <input type="number" name="reg-user-phone" id="reg-user-phone" placeholder="9876543210" required>
+                    <input type="number" name="reg-user-phone" id="reg-user-phone"
+                        value="<?= htmlspecialchars($user['user_Phone']) ?>" required>
 
                     <label for="reg-user-address">Address:</label>
                     <input type="text" name="reg-user-address" id="reg-user-address"
-                        placeholder="01, Abc Street, XYZ Road, City. PINCODE" required>
+                        value="<?= htmlspecialchars($user['user_Address']) ?>" required>
 
                     <button type="submit">Save Details</button>
                 </form>
