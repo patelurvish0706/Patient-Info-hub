@@ -39,6 +39,7 @@ if ($result->num_rows > 0) {
     if ($update->execute()) {
         // echo "Hospital details updated successfully.";
         header("Location: ../dashboard_admin.php");
+        $_SESSION['hospital_Id'] = $newHospitalId;
     } else {
         echo "Error updating hospital: " . $update->error;
     }

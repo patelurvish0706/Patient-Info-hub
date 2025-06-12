@@ -83,6 +83,6 @@ function switchTabUser(tab) {
 
 function LogoutAdmin() {
     // Redirect to PHP logout script
-    window.location.href = "admin_logout.php";
+    window.location.href = "script/admin_logout.php";
 }
 

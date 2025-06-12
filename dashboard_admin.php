@@ -1,9 +1,31 @@
 <?php
 session_start();
+include 'script/db_connection.php';
 if (!isset($_SESSION['admin_Id'])) {
     header("Location: manage.html");
     exit;
 }
+
+$adminId = $_SESSION['admin_Id'];
+
+// Check if hospital_Id is already stored in session
+if (!isset($_SESSION['hospital_Id'])) {
+    $stmt = $conn->prepare("SELECT hospital_Id FROM hospitals WHERE admin_Id = ?");
+    $stmt->bind_param("i", $adminId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $hospital = $result->fetch_assoc();
+        $_SESSION['hospital_Id'] = $hospital['hospital_Id']; // ✅ Set session
+    } else {
+        $_SESSION['hospital_Id'] = null; // Optional: indicate no hospital yet
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +45,7 @@ if (!isset($_SESSION['admin_Id'])) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        #manageHospital{
+        #manageHospital,#manageDepartment,#manageDoctor{
             flex-direction:column;
         }
 
@@ -67,8 +89,7 @@ if (!isset($_SESSION['admin_Id'])) {
             <div id="manageHospital" style="display: flex;">
                 <h2>Manage Hospital</h2>
                 <div id="listApps">
-                    <div id="newHospt" class="appTabNames">New Hospital</div>
-                    <div id="existing" class="appTabNames">Existing</div>
+                    <div id="newHospt" class="appTabNames">Hospital</div>
                 </div>
                 <div id="appsContainer">
                     <div id="newHospt-content">
@@ -112,7 +133,7 @@ if (!isset($_SESSION['admin_Id'])) {
                         $conn->close();
                         ?>
                         <form action="script/submit_hospital.php" method="post">
-                            <p>Enter Hospital Details.</p>
+                            <p>*Must Have To Fill <b>Hospital</b> Detail Form Before Generating Departments.</p>
 
                             <label for="hospital-name">Hospital Name:</label>
                             <input type="text" name="hospital-name" id="hospital-name" placeholder="The Great Civil Hospital, Ahmedabad"
@@ -146,16 +167,51 @@ if (!isset($_SESSION['admin_Id'])) {
                             <button type="submit" onclick="validateHospitalSub(event);">Save Details</button>
                         </form>
                     </div>
-
-                    <div id="existing-content">
-
-                    </div>
-
                 </div>
             </div>
             
             <div id="manageDepartment">
                 <h2>Manage Department</h2>
+                <div id="listApps">
+                    <div id="addDepts" class="appTabNames">Add Departments</div>
+                    <div id="listDepts" class="appTabNames">List Departments</div>
+                </div>
+                
+                <div id="appsContainer">
+                    <div id="addDepts-content">
+                        <?php
+                        // Check if hospital_Id is missing or null
+                        if (!isset($_SESSION['hospital_Id']) || $_SESSION['hospital_Id'] === null) {
+                            echo "<script>alert('Please fill out the Hospital Details Form to proceed.');</script>";
+                        }
+                        ?>
+                        
+                        <form action="script/submit_department.php" method="post">
+                            <p>*Enter Department Details.</p>
+
+                            <label for="department-name">Department Name:</label>
+                            <input type="text" name="department_name" id="department-name" placeholder="Cardiology section" required>
+
+                            <label for="department-email">Department Email:</label>
+                            <input type="email" name="department_email" id="department-email" placeholder="department@email.com" required>
+
+                            <label for="department-phone">Phone:</label>
+                            <input type="number" name="department_phone" id="department-phone" placeholder="9876543210" required>
+
+                            <label for="department-password">Set Password:</label>
+                            <input type="password" name="department_password" id="department-password" placeholder="********" required>
+
+                            <label for="department-description">Description:</label>
+                            <input type="text" name="department_description" id="department-description" placeholder="Surgery of heart. Emergency Services and Transplant." required>
+
+                            <button type="submit">Save Details</button>
+                        </form>
+
+                    </div>
+                    <div id="listDepts-content">
+
+                    </div>
+                </div>
             </div> 
                 
             <div id="manageDoctor">

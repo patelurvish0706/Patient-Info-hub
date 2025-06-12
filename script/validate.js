@@ -113,3 +113,9 @@ function validateHospitalSub(event){
 
         alert("Details Updated.")
 }
+
+function validateDepartmentSub(event){
+    event.preventDefault();
+    // this.submit();
+
+}

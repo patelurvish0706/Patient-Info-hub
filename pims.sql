@@ -78,7 +78,8 @@ CREATE TABLE `departments` (
   `dept_Name` varchar(100) NOT NULL,
   `dept_Email` varchar(100) NOT NULL,
   `dept_Phone` varchar(15) DEFAULT NULL,
-  `dept_Password` varchar(255) NOT NULL
+  `dept_Password` varchar(255) NOT NULL,
+  `dept_Description` varchar(556) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
