@@ -21,21 +21,6 @@ $stmt->execute();
 $departments = $stmt->get_result();
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Manage Departments</title>
-    <style>
-        .dept-card{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0;width:100%;max-width:500px}
-        .dept-card label{display:block;margin-top:.5rem;font-weight:600}
-        .dept-card input{width:100%;padding:.4rem;margin-top:.2rem}
-        .dept-card button{margin-top:.8rem;padding:.5rem 1rem;cursor:pointer}
-    </style>
-</head>
-<body>
-
-<h2>Your Departments</h2>
 
 <?php if ($departments->num_rows === 0): ?>
     <p>No departments yet. <a href="../add_department_form.php">Add the first one</a>.</p>
@@ -64,6 +49,3 @@ $departments = $stmt->get_result();
         <button type="submit">Update Department</button>
     </form>
 <?php endwhile; $stmt->close(); $conn->close(); ?>
-
-</body>
-</html>

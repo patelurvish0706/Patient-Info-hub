@@ -86,3 +86,17 @@ function LogoutAdmin() {
     window.location.href = "script/admin_logout.php";
 }
 
+function dataUpdated(){
+    switchTabAdmin('mngDprtmnt');
+    alert('Your Department Information is updated successfully.');
+}
+
+function showAddDepartment(){
+    document.getElementById('addDepts-content').style.display = 'flex';
+    document.getElementById('listDepts-content').style.display = 'none';
+    
+}
+function showListDepartment(){
+    document.getElementById('addDepts-content').style.display = 'none';
+    document.getElementById('listDepts-content').style.display = 'flex';
+}

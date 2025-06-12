@@ -50,7 +50,8 @@ $update = $conn->prepare(
 $update->bind_param("sssssi", $name, $email, $phone, $hashed, $description, $deptId);
 
 if ($update->execute()) {
-    echo "<script>alert('Department updated.'); window.location.href='showDepts.php';</script>";
+    // echo "<script>alert('Department updated.'); window.history.back();";
+    echo "<script>  window.history.back();</script>";
 } else {
     echo "<script>alert('Update failed: ". $update->error ."'); history.back();</script>";
 }
