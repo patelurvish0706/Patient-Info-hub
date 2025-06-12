@@ -95,6 +95,7 @@ p{
     background-color: #fff;
     padding: 8px 40px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .appTabNames:hover{

@@ -41,21 +41,28 @@ $conn->close();
     <link rel="stylesheet" href="style/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="script/validate.js"></script>
-    
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        #manageHospital,#manageDepartment,#manageDoctor{
-            flex-direction:column;
+        #manageHospital,
+        #manageDepartment,
+        #manageDoctor {
+            flex-direction: column;
         }
 
-        #map{
-            width: 100% ;
-            height : 300px;
+        #map {
+            width: 100%;
+            height: 300px;
         }
 
-        #listDepts-content{
-            flex-direction:column;
+        #listDepts-content,#listDoctor-content {
+            flex-direction: column;
+        }
+
+        #addDepts,#addDoctor {
+            background-color: #1E90FF;
+            color: #fff;
         }
     </style>
 </head>
@@ -80,7 +87,7 @@ $conn->close();
                     <i class="fa-solid fa-hospital"></i>Manage Hospital
                 </div>
                 <div class="tabButton" onclick="switchTabAdmin('mngDprtmnt');">
-                    <i class="fa-solid fa-sitemap"></i>Manage Department 
+                    <i class="fa-solid fa-sitemap"></i>Manage Department
                 </div>
                 <div class="tabButton" onclick="switchTabAdmin('mngDctrs');">
                     <i class="fa-solid fa-user-doctor"></i>Manage Doctors
@@ -100,174 +107,352 @@ $conn->close();
                         <?php
                         // session_start();
                         include 'script/db_connection.php'; // adjust path if needed
-                            
+                        
                         if (!isset($_SESSION['admin_Id'])) {
                             die("Unauthorized. Please login.");
                         }
-                        
+
                         $adminId = $_SESSION['admin_Id'];
-                        
+
                         // Initialize form fields
-                        $hospitalName  = "";
+                        $hospitalName = "";
                         $hospitalEmail = "";
-                        $timeOpen      = "";
-                        $timeClose     = "";
-                        $phone         = "";
-                        $lat           = "";
-                        $long          = "";
-                        
+                        $timeOpen = "";
+                        $timeClose = "";
+                        $phone = "";
+                        $lat = "";
+                        $long = "";
+
                         // Check if data already exists
                         $stmt = $conn->prepare("SELECT * FROM hospitals WHERE admin_Id = ?");
                         $stmt->bind_param("i", $adminId);
                         $stmt->execute();
                         $result = $stmt->get_result();
-                        
+
                         if ($result->num_rows > 0) {
                             $hospital = $result->fetch_assoc();
-                        
-                            $hospitalName  = $hospital['hospital_Name'];
+
+                            $hospitalName = $hospital['hospital_Name'];
                             $hospitalEmail = $hospital['hospital_Email'];
-                            $timeOpen      = $hospital['hospital_Time_open'];
-                            $timeClose     = $hospital['hospital_Time_close'];
-                            $phone         = $hospital['hospital_Phone'];
-                            $lat           = $hospital['hospital_Lat'];
-                            $long          = $hospital['hospital_Long'];
+                            $timeOpen = $hospital['hospital_Time_open'];
+                            $timeClose = $hospital['hospital_Time_close'];
+                            $phone = $hospital['hospital_Phone'];
+                            $lat = $hospital['hospital_Lat'];
+                            $long = $hospital['hospital_Long'];
                         }
-                        
+
                         $conn->close();
                         ?>
                         <form action="script/submit_hospital.php" method="post">
-                            <p>*Must Have To Fill <b>Hospital</b> Detail Form Before Generating Departments.</p>
+                            <p><b>Must Fill Hospital Detail Before Creating Departments.</b></p>
 
                             <label for="hospital-name">Hospital Name:</label>
-                            <input type="text" name="hospital-name" id="hospital-name" placeholder="The Great Civil Hospital, Ahmedabad"
-                                   value="<?= htmlspecialchars($hospitalName) ?>" required>
+                            <input type="text" name="hospital-name" id="hospital-name"
+                                placeholder="The Great Civil Hospital, Ahmedabad"
+                                value="<?= htmlspecialchars($hospitalName) ?>" required>
 
                             <label for="hospital-email">Hospital Email:</label>
-                            <input type="email" name="hospital-email" id="hospital-email" placeholder="hospital@email.com"
-                                   value="<?= htmlspecialchars($hospitalEmail) ?>" required>
+                            <input type="email" name="hospital-email" id="hospital-email"
+                                placeholder="hospital@email.com" value="<?= htmlspecialchars($hospitalEmail) ?>"
+                                required>
 
                             <label>Time:</label>
                             Open at <input type="time" name="hospital-time-open" id="hospital-time-open"
-                                           value="<?= $timeOpen ?>" required>
+                                value="<?= $timeOpen ?>" required>
                             Close at <input type="time" name="hospital-time-close" id="hospital-time-close"
-                                            value="<?= $timeClose ?>" required>
+                                value="<?= $timeClose ?>" required>
 
                             <label for="hospital-phone">Phone:</label>
                             <input type="number" name="hospital-phone" id="hospital-phone" placeholder="9876543210"
-                                   value="<?= htmlspecialchars($phone) ?>" required>
+                                value="<?= htmlspecialchars($phone) ?>" required>
 
                             <label for="hospital-loc">Select Location:</label>
                             <div id="map" name="hospital-loc"></div>
 
                             <label for="hospital-latitude">Hospital Latitude</label>
                             <input type="number" name="hospital-latitude" id="hospital-latitude" step="any"
-                                   value="<?= $lat ?>" required>
+                                value="<?= $lat ?>" required>
 
                             <label for="hospital-longitude">Hospital Longitude</label>
                             <input type="number" name="hospital-longitude" id="hospital-longitude" step="any"
-                                   value="<?= $long ?>" required>
+                                value="<?= $long ?>" required>
 
-                            <button type="submit" onclick="validateHospitalSub(event);">Save Details</button>
+                            <!-- <button type="submit" onclick="validateHospitalSub(event);">Save Details</button> -->
+                            <button type="submit">Save Details</button>
                         </form>
+                        <script>
+                            let map, marker;
+                            function initMap() {
+                                const latInput = document.getElementById('hospital-latitude');
+                                const lonInput = document.getElementById('hospital-longitude');
+
+                                let lat = parseFloat(latInput.value) || 20.5937;
+                                let lon = parseFloat(lonInput.value) || 78.9629;
+                                let zoom = (latInput.value && lonInput.value) ? 16 : 5;
+
+                                map = L.map('map').setView([lat, lon], zoom);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '© OpenStreetMap contributors'
+                                }).addTo(map);
+
+                                if (latInput.value && lonInput.value) {
+                                    marker = L.marker([lat, lon]).addTo(map);
+                                }
+
+                                map.on('click', function (e) {
+                                    latInput.value = e.latlng.lat.toFixed(7);
+                                    lonInput.value = e.latlng.lng.toFixed(7);
+                                    if (marker) {
+                                        marker.setLatLng(e.latlng);
+                                    } else {
+                                        marker = L.marker(e.latlng).addTo(map);
+                                    }
+                                });
+
+                                if (!latInput.value) {
+                                    if (navigator.geolocation) {
+                                        navigator.geolocation.getCurrentPosition((pos) => {
+                                            const coords = [pos.coords.latitude, pos.coords.longitude];
+                                            map.setView(coords, 16);
+                                            marker = L.marker(coords).addTo(map);
+                                            latInput.value = coords[0].toFixed(7);
+                                            lonInput.value = coords[1].toFixed(7);
+                                        });
+                                    }
+                                }
+                            }
+                            window.onload = initMap;
+                        </script>
                     </div>
                 </div>
             </div>
-            
+
             <div id="manageDepartment">
                 <h2>Manage Department</h2>
                 <div id="listApps">
-                    <div id="listDepts" class="appTabNames" onclick="showListDepartment();">List Departments</div>
                     <div id="addDepts" class="appTabNames" onclick="showAddDepartment();">Add Departments</div>
+                    <div id="listDepts" class="appTabNames" onclick="showListDepartment();">List Departments</div>
                 </div>
-                
+
                 <div id="appsContainer">
-                    <div id="addDepts-content" style="display:none;">
-                        <?php
-                        // Check if hospital_Id is missing or null
-                        if (!isset($_SESSION['hospital_Id']) || $_SESSION['hospital_Id'] === null) {
-                            echo "<script>alert('Please fill out the Hospital Details Form to proceed.');</script>";
-                        }
-                        ?>
-                        
+                    <div id="addDepts-content" style="display:flex;">
+
                         <form action="script/submit_department.php" method="post">
-                            <p>*Enter Department Details.</p>
+                            <p><b>Creating New Department.</b></p>
 
                             <label for="department-name">Department Name:</label>
-                            <input type="text" name="department_name" id="department-name" placeholder="Cardiology section" required>
+                            <input type="text" name="department_name" id="department-name"
+                                placeholder="Cardiology section" required>
 
                             <label for="department-email">Department Email:</label>
-                            <input type="email" name="department_email" id="department-email" placeholder="department@email.com" required>
+                            <input type="email" name="department_email" id="department-email"
+                                placeholder="department@email.com" required>
 
                             <label for="department-phone">Phone:</label>
-                            <input type="number" name="department_phone" id="department-phone" placeholder="9876543210" required>
+                            <input type="number" name="department_phone" id="department-phone" placeholder="9876543210"
+                                required>
 
                             <label for="department-password">Set Password:</label>
-                            <input type="password" name="department_password" id="department-password" placeholder="********" required>
+                            <input type="password" name="department_password" id="department-password"
+                                placeholder="********" required>
 
                             <label for="department-description">Description:</label>
-                            <input type="text" name="department_description" id="department-description" placeholder="Surgery of heart. Emergency Services and Transplant." required>
+                            <input type="text" name="department_description" id="department-description"
+                                placeholder="Surgery of heart. Emergency Services and Transplant." required>
 
                             <button type="submit">Save Details</button>
                         </form>
 
                     </div>
-                    <div id="listDepts-content" >
+                    <div id="listDepts-content" style="display: none;">
+                        <p><b>List of Existing Departments</b></p>
                         <?php
                         include 'script/db_connection.php';     // adjust path as needed
- 
+                        
                         /* ────────── SECURITY ────────── */
-                        if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {
-                            die("Please log in first.");
-                            }
-                            $hospitalId = $_SESSION['hospital_Id'];
+                        // if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {
+                        //     die("Please fill Hospital Details first.");
+                        // }
+                        $hospitalId = $_SESSION['hospital_Id'];
 
-                            /* ────────── FETCH ALL DEPARTMENTS FOR THIS HOSPITAL ────────── */
-                            $stmt = $conn->prepare(
-                                "SELECT dept_Id, dept_Name, dept_Email, dept_Phone, '' AS dept_Password,
+                        /* ────────── FETCH ALL DEPARTMENTS FOR THIS HOSPITAL ────────── */
+                        $stmt = $conn->prepare(
+                            "SELECT dept_Id, dept_Name, dept_Email, dept_Phone, '' AS dept_Password,
                                     dept_Description
                                      FROM departments
                                      WHERE hospital_Id = ?
                                      ORDER BY dept_Name"
-                            );
-                            $stmt->bind_param("i", $hospitalId);
-                            $stmt->execute();
-                            $departments = $stmt->get_result();
+                        );
+                        $stmt->bind_param("i", $hospitalId);
+                        $stmt->execute();
+                        $departments = $stmt->get_result();
                         ?>
 
-                        <?php if ($departments->num_rows === 0): ?>
-                            <p>No departments yet. <a href="../add_department_form.php">Add the first one</a>.</p>
-                        <?php endif; ?>
-                        
                         <?php while ($row = $departments->fetch_assoc()): ?>
-                            <form class="dept-card" action="update_department.php" method="post">
+                            <form  action="script/update_department.php" method="post">
                                 <input type="hidden" name="dept_id" value="<?= $row['dept_Id']; ?>">
-                        
+
                                 <label>Department Name:</label>
-                                <input type="text" name="dept_name" value="<?= htmlspecialchars($row['dept_Name']); ?>" required>
-                        
+                                <input type="text" name="dept_name" value="<?= htmlspecialchars($row['dept_Name']); ?>"
+                                    required>
+
                                 <label>Department Email:</label>
-                                <input type="email" name="dept_email" value="<?= htmlspecialchars($row['dept_Email']); ?>" required>
-                        
+                                <input type="email" name="dept_email" value="<?= htmlspecialchars($row['dept_Email']); ?>"
+                                    required>
+
                                 <label>Phone:</label>
-                                <input type="text" name="dept_phone" value="<?= htmlspecialchars($row['dept_Phone']); ?>" required>
-                        
+                                <input type="text" name="dept_phone" value="<?= htmlspecialchars($row['dept_Phone']); ?>"
+                                    required>
+
                                 <label>New Password (leave blank to keep existing):</label>
                                 <input type="password" name="dept_password" placeholder="••••••••">
-                        
+
                                 <label>Description:</label>
                                 <input type="text" name="dept_description"
-                                       value="<?= htmlspecialchars($row['dept_Description']); ?>" required>
-                        
+                                    value="<?= htmlspecialchars($row['dept_Description']); ?>" required>
+
                                 <button type="submit" onclick="dataUpdated()">Update Department</button>
                             </form>
-                        <?php endwhile; $stmt->close(); $conn->close(); ?>
-                        </div>
+                        <?php endwhile;
+                        $stmt->close();
+                        $conn->close(); ?>
                     </div>
-                </div> 
+                </div>
+            </div>
 
-             <div id="manageDoctor">
-                 <h2>Manage Doctors</h2>
+            <div id="manageDoctor">
+                <h2>Manage Doctors</h2>
+                <div id="listApps">
+                    <div id="addDoctor" class="appTabNames" onclick="showAddDoctor();">Add Doctor</div>
+                    <div id="listDoctor" class="appTabNames" onclick="showListDoctors();">List Doctors</div>
+                </div>
+
+                <div id="appsContainer">
+                    <div id="addDoctor-content" style="display:flex;">
+                        <?php
+                        // session_start();
+                        include 'script/db_connection.php'; // Update this path as needed
+                        
+                        if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {
+                            die("Unauthorized access.");
+                        }
+
+                        $adminId = $_SESSION['admin_Id'];
+
+                        /* Fetch departments for current admin */
+                        $stmt = $conn->prepare("SELECT dept_Id, dept_Name FROM departments WHERE admin_Id = ?");
+                        $stmt->bind_param("i", $adminId);
+                        $stmt->execute();
+                        $departments = $stmt->get_result();
+                        ?>
+
+                        <form action="script/submit_doctor.php" method="post">
+                            <p><b>Creating New Doctor Profile.</b></p>
+
+                            <label for="doctor-name">Doctor Name:</label>
+                            <input type="text" name="doctor_name" id="doctor-name" placeholder="Sarah Smith" required>
+
+                            <label for="doctor-email">Doctor Email:</label>
+                            <input type="email" name="doctor_email" id="doctor-email" placeholder="doctor@email.com"
+                                required>
+
+                            <label for="doctor-phone">Phone:</label>
+                            <input type="number" name="doctor_phone" id="doctor-phone" placeholder="9876543210"
+                                required>
+
+                            <label for="doctor-password">Set Password:</label>
+                            <input type="password" name="doctor_password" id="doctor-password" placeholder="••••••"
+                                required>
+
+                            <label for="doctor-department">Department:</label>
+                            <select name="doctor_department" id="doctor-department" required>
+                                <option value="" disabled selected>Select your Department</option>
+                                <?php while ($row = $departments->fetch_assoc()): ?>
+                                    <option value="<?= $row['dept_Id'] ?>"><?= htmlspecialchars($row['dept_Name']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+
+                            <label for="doctor-description">Specialist:</label>
+                            <input type="text" name="doctor_description" id="doctor-description"
+                                placeholder="Neurologist PhD" required>
+
+                            <button type="submit">Save Details</button>
+                        </form>
+
+
+                    </div>
+
+                    <div id="listDoctor-content" style="display:none;">
+                        <p><b>List of Existing Doctors.</b></p>
+                        <?php
+                        // session_start();
+                        include 'script/db_connection.php'; // Adjust path
+                        
+                        // if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {
+                        //     die("Unauthorized access.");
+                        // }
+                        
+                        $adminId = $_SESSION['admin_Id'];
+                        $hospitalId = $_SESSION['hospital_Id'];
+
+                        // Get departments
+                        $deptStmt = $conn->prepare("SELECT dept_Id, dept_Name FROM departments WHERE admin_Id = ?");
+                        $deptStmt->bind_param("i", $adminId);
+                        $deptStmt->execute();
+                        $deptResult = $deptStmt->get_result();
+                        $departments = [];
+                        while ($row = $deptResult->fetch_assoc()) {
+                            $departments[$row['dept_Id']] = $row['dept_Name'];
+                        }
+
+                        // Get doctors
+                        $docStmt = $conn->prepare("SELECT * FROM doctors WHERE admin_Id = ? AND hospital_Id = ?");
+                        $docStmt->bind_param("ii", $adminId, $hospitalId);
+                        $docStmt->execute();
+                        $doctors = $docStmt->get_result();
+                        ?>
+
+                        <?php while ($doctor = $doctors->fetch_assoc()): ?>
+                            <form action="script/update_doctor.php" method="post"
+                                style="margin-bottom: 25px;">
+                                <input type="hidden" name="doct_id" value="<?= $doctor['doct_Id'] ?>">
+
+                                <label for="doctor-name">Doctor Name:</label>
+                                <input type="text" name="doctor_name" value="<?= htmlspecialchars($doctor['doct_Name']) ?>"
+                                    required>
+
+                                <label for="doctor-email">Doctor Email:</label>
+                                <input type="email" name="doctor_email"
+                                    value="<?= htmlspecialchars($doctor['doct_Email']) ?>" required>
+
+                                <label for="doctor-phone">Phone:</label>
+                                <input type="number" name="doctor_phone"
+                                    value="<?= htmlspecialchars($doctor['doct_Phone']) ?>" required>
+
+                                <label for="doctor-password">Set New Password (leave blank to keep old):</label>
+                                <input type="password" name="doctor_password" placeholder="••••••">
+
+                                <label for="doctor-department">Department:</label>
+                                <select name="doctor_department" required>
+                                    <option disabled>Select your Department</option>
+                                    <?php foreach ($departments as $deptId => $deptName): ?>
+                                        <option value="<?= $deptId ?>" <?= $doctor['dept_Id'] == $deptId ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($deptName) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+
+                                <label for="doctor-description">Specialist:</label>
+                                <input type="text" name="doctor_description"
+                                    value="<?= htmlspecialchars($doctor['doct_Speacialist']) ?>" required>
+
+                                <button type="submit">Update Doctor</button>
+                            </form>
+                        <?php endwhile; ?>
+
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -277,50 +462,7 @@ $conn->close();
         allAdminHidden();
         document.getElementById('manageHospital').style.display = "flex"
     </script>
-    <script>
-        let map, marker;
-        function initMap() {
-            const latInput = document.getElementById('hospital-latitude');
-            const lonInput = document.getElementById('hospital-longitude');
 
-            let lat = parseFloat(latInput.value) || 20.5937;
-            let lon = parseFloat(lonInput.value) || 78.9629;
-            let zoom = (latInput.value && lonInput.value) ? 16 : 5;
-
-            map = L.map('map').setView([lat, lon], zoom);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            if (latInput.value && lonInput.value) {
-                marker = L.marker([lat, lon]).addTo(map);
-            }
-
-            map.on('click', function(e) {
-                latInput.value = e.latlng.lat.toFixed(7);
-                lonInput.value = e.latlng.lng.toFixed(7);
-                if (marker) {
-                    marker.setLatLng(e.latlng);
-                } else {
-                    marker = L.marker(e.latlng).addTo(map);
-                }
-            });
-
-            if (!latInput.value) {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((pos) => {
-                        const coords = [pos.coords.latitude, pos.coords.longitude];
-                        map.setView(coords, 16);
-                        marker = L.marker(coords).addTo(map);
-                        latInput.value = coords[0].toFixed(7);
-                        lonInput.value = coords[1].toFixed(7);
-                    });
-                }
-            }
-        }
-        window.onload = initMap;
-    </script>
 </body>
 
 </html>
-

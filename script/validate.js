@@ -100,7 +100,7 @@ function validateHospitalSub(event){
 
         // If errors, prevent form submission and show alerts
         if (errorMessages.length > 0) {
-            e.preventDefault();
+            // e.preventDefault();
             alert(errorMessages.join("\n"));
         }
 

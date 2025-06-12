@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'script/db_connection.php';      // adjust path
+include 'db_connection.php';      // adjust path
 
 /* ─────── SECURITY ─────── */
 if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {

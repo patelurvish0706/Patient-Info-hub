@@ -17,7 +17,7 @@ function allAdminHidden() {
     document.getElementById('manageDoctor').style.display = "none"
 }
 
-function allUserHidden(){
+function allUserHidden() {
     document.getElementById('myDetails').style.display = "none"
     document.getElementById('bookAppointment').style.display = "none"
     document.getElementById('trackAppointment').style.display = "none"
@@ -86,17 +86,64 @@ function LogoutAdmin() {
     window.location.href = "script/admin_logout.php";
 }
 
-function dataUpdated(){
+function dataUpdated() {
     switchTabAdmin('mngDprtmnt');
     alert('Your Department Information is updated successfully.');
 }
 
-function showAddDepartment(){
+// function showdefault(){
+//     document.getElementById('listDepts').style.backgroundColor = '#1E90FF';
+//     document.getElementById('listDepts').style.color = '#FFF';
+// }
+
+// ADDING and UPDATING -> DEPARTMENT
+
+function showAddDepartment() {
+
+    document.getElementById('listDepts').style.backgroundColor = '#FFF';
+    document.getElementById('listDepts').style.color = '#000';
+
+    document.getElementById('addDepts').style.backgroundColor = '#1E90FF';
+    document.getElementById('addDepts').style.color = '#FFF';
+
     document.getElementById('addDepts-content').style.display = 'flex';
     document.getElementById('listDepts-content').style.display = 'none';
-    
+
 }
-function showListDepartment(){
+
+function showListDepartment() {
+    document.getElementById('listDepts').style.backgroundColor = '#1E90FF';
+    document.getElementById('listDepts').style.color = '#FFF';
+
+    document.getElementById('addDepts').style.backgroundColor = '#FFF';
+    document.getElementById('addDepts').style.color = '#000';
+
     document.getElementById('addDepts-content').style.display = 'none';
     document.getElementById('listDepts-content').style.display = 'flex';
+}
+
+// ADDING and UPDATING -> DOCTORS
+
+function showAddDoctor() {
+
+    document.getElementById('listDoctor').style.backgroundColor = '#FFF';
+    document.getElementById('listDoctor').style.color = '#000';
+
+    document.getElementById('addDoctor').style.backgroundColor = '#1E90FF';
+    document.getElementById('addDoctor').style.color = '#FFF';
+
+    document.getElementById('addDoctor-content').style.display = 'flex';
+    document.getElementById('listDoctor-content').style.display = 'none';
+
+}
+function showListDoctors(){
+
+    document.getElementById('listDoctor').style.backgroundColor = '#1E90FF';
+    document.getElementById('listDoctor').style.color = '#FFF';
+
+    document.getElementById('addDoctor').style.backgroundColor = '#FFF';
+    document.getElementById('addDoctor').style.color = '#000';
+
+    document.getElementById('addDoctor-content').style.display = 'none';
+    document.getElementById('listDoctor-content').style.display = 'flex';
 }
