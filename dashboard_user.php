@@ -70,6 +70,13 @@ $user = $result->fetch_assoc();
             /* color: #000; */
             font-weight: 500;
         }
+
+        #AllApps-content,
+        #approvedApps-content,
+        #rejectedApps-content,
+        #pendingApps-content {
+            flex-direction: column;
+        }
     </style>
     <script>
         function bookAppointment(deptId, deptName, hospitalName) {
@@ -231,39 +238,97 @@ $user = $result->fetch_assoc();
             <div id="trackAppointment">
                 <h2>My Appointments</h2>
                 <div id="listApps">
-                    <div id="pendingApps" class="appTabNames">Pending</div>
-                    <div id="approvedApps" class="appTabNames">Approved</div>
-                    <div id="previousApps" class="appTabNames">Previous</div>
+                    <div id="AllApps" class="appTabNames" onclick="switchUserApps('all');">All</div>
+                    <div id="pendingApps" class="appTabNames" onclick="switchUserApps('pending');">Pending</div>
+                    <div id="approvedApps" class="appTabNames" onclick="switchUserApps('approved');">Approved</div>
+                    <div id="rejectedApps" class="appTabNames" onclick="switchUserApps('rejected');">Rejected</div>
                 </div>
 
-                <div id="appsContainer">
-                    <div id="appBox">
-                        <div id="appInfo">
-                            <div id="dept-name">CardioLogy Section - The Great Civil Hospital</div>
-                            <div id="dept-phone">Enquiry: 9998654979</div>
-                            <div id="doct-name">Dr. Sarah Smith</div>
-                            <div id="date-time">
-                                <div id="app-date">12-9</div>
-                                <div id="app-time">6:30 PM</div>
-                            </div>
-                        </div>
-                        <div id="appStatus">Pending</div>
-                    </div>
+                <?php
+                // session_start();
+                include 'script/db_connection.php';
 
-                    <div id="appBox">
-                        <div id="appInfo">
-                            <div id="dept-name">CardioLogy Section - The Great Civil Hospital</div>
-                            <div id="dept-phone">Enquiry: 9998654979</div>
-                            <div id="doct-name">Dr. Sarah Smith</div>
-                            <div id="date-time">
-                                <div id="app-date">12-9</div>
-                                <div id="app-time">6:30 PM</div>
-                            </div>
-                        </div>
-                        <div id="appStatus">Pending</div>
+                if (!isset($_SESSION['user_Id'])) {
+                    die("Unauthorized.");
+                }
+
+                $userId = $_SESSION['user_Id'];
+
+                // Fetch all appointments for this user
+                $sql = "SELECT a.app_Id, a.app_date, a.app_time, a.visit_for, 
+                               d.dept_Name, h.hospital_Name,
+                               ap.approval_Status
+                        FROM appointments a
+                        JOIN departments d ON a.dept_id = d.dept_Id
+                        JOIN hospitals h ON d.hospital_Id = h.hospital_Id
+                        LEFT JOIN approval ap ON ap.app_Id = a.app_Id
+                        WHERE a.user_Id = ?
+                        ORDER BY a.app_date DESC, a.app_time DESC";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $userId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                // Containers for different status types
+                $allApps = "";
+                $approvedApps = "";
+                $rejectedApps = "";
+                $pendingApps = "";
+
+                while ($row = $result->fetch_assoc()) {
+                    $status = $row['approval_Status'] ?? 'Pending';
+
+                    $card = '<div class="appointment-card" style="border:1px solid #ccc; padding:12px; margin:12px 0;">
+                                <p><strong>Hospital:</strong> ' . htmlspecialchars($row['hospital_Name']) . '</p>
+                                <p><strong>Department:</strong> ' . htmlspecialchars($row['dept_Name']) . '</p>
+                                <p><strong>Date:</strong> ' . htmlspecialchars($row['app_date']) . '</p>
+                                <p><strong>Time:</strong> ' . htmlspecialchars($row['app_time']) . '</p>
+                                <p><strong>Visit For:</strong> ' . htmlspecialchars($row['visit_for']) . '</p>
+                                <p><strong>Status:</strong> <span style="float:right; font-weight:bold;">' . htmlspecialchars($status) . '</span></p>
+                            </div>';
+
+                    // Append to All
+                    $allApps .= $card;
+
+                    // Append to status-specific
+                    if ($status === 'Approved') {
+                        $approvedApps .= $card;
+                    } elseif ($status === 'Rejected') {
+                        $rejectedApps .= $card;
+                    } else {
+                        $pendingApps .= $card;
+                    }
+                }
+
+                $stmt->close();
+                $conn->close();
+                ?>
+
+                <div id="appsContainer">
+                    <div id="AllApps-content" style="display:flex;">
+
+                    </div>
+                    <div id="pendingApps-content" style="display:none;">
+
+                    </div>
+                    <div id="approvedApps-content" style="display:none;">
+
+                    </div>
+                    <div id="rejectedApps-content" style="display:none;">
+
                     </div>
                 </div>
             </div>
+
+            <!-- Inject into containers -->
+            <script>
+                document.getElementById("AllApps-content").innerHTML = `<?= $allApps ?>`;
+                document.getElementById("pendingApps-content").innerHTML = `<?= $pendingApps ?>`;
+                document.getElementById("approvedApps-content").innerHTML = `<?= $approvedApps ?>`;
+                document.getElementById("rejectedApps-content").innerHTML = `<?= $rejectedApps ?>`;
+            </script>
+
 
             <div id="reports">
                 <h2>Your Reports</h2>

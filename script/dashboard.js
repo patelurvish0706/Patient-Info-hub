@@ -11,18 +11,11 @@ tabButtons.forEach(button => {
 
 // -------------------- DashBoard --- Flex Data and None other Tabs ---------------- 
 
+// dashboard -> Admin
 function allAdminHidden() {
     document.getElementById('manageHospital').style.display = "none"
     document.getElementById('manageDepartment').style.display = "none"
     document.getElementById('manageDoctor').style.display = "none"
-}
-
-function allUserHidden() {
-    document.getElementById('myDetails').style.display = "none"
-    document.getElementById('bookAppointment').style.display = "none"
-    document.getElementById('trackAppointment').style.display = "none"
-    document.getElementById('reports').style.display = "none"
-    document.getElementById('prescriptions').style.display = "none"
 }
 
 function switchTabAdmin(tab) {
@@ -45,6 +38,16 @@ function switchTabAdmin(tab) {
         default:
             break;
     }
+}
+
+// Dashboard -> User
+
+function allUserHidden() {
+    document.getElementById('myDetails').style.display = "none"
+    document.getElementById('bookAppointment').style.display = "none"
+    document.getElementById('trackAppointment').style.display = "none"
+    document.getElementById('reports').style.display = "none"
+    document.getElementById('prescriptions').style.display = "none"
 }
 
 function switchTabUser(tab) {
@@ -79,13 +82,74 @@ function switchTabUser(tab) {
     }
 }
 
+// Dashboard -> user -> Appointment Filter
+
+function allUserAppHidden() {
+    document.getElementById('AllApps-content').style.display = 'none';
+    document.getElementById('pendingApps-content').style.display = 'none';
+    document.getElementById('approvedApps-content').style.display = 'none';
+    document.getElementById('rejectedApps-content').style.display = 'none';
+}
+
+function switchUserApps(tab) {
+    switch (tab) {
+        case 'all':
+            allUserAppHidden();
+            document.getElementById('AllApps-content').style.display = "flex"
+            break;
+
+        case 'pending':
+            allUserAppHidden();
+            document.getElementById('pendingApps-content').style.display = "flex"
+            break;
+
+        case 'approved':
+            allUserAppHidden();
+            document.getElementById('approvedApps-content').style.display = "flex"
+            break;
+
+        case 'rejected':
+            allUserAppHidden();
+            document.getElementById('rejectedApps-content').style.display = "flex"
+            break;
+
+        default:
+            break;
+    }
+}
+
+// Dashboard -> Department
+
+function allDepartmentHidden() {
+    document.getElementById('requests').style.display = "none"
+    document.getElementById('attendence').style.display = "none"
+}
+
+function switchTabDept(tab) {
+    switch (tab) {
+        case 'requests':
+            allDepartmentHidden()
+            document.getElementById('requests').style.display = "flex"
+            break;
+
+        case 'attendence':
+            allDepartmentHidden()
+            document.getElementById('attendence').style.display = "flex"
+            break;
+
+        default:
+            break;
+    }
+}
+
+
 // Logout
 
 function LogoutAdmin() {
     window.location.href = "script/admin_logout.php";
 }
 
-function LogoutUser(){
+function LogoutUser() {
     window.location.href = "script/user_logout.php";
 }
 
@@ -134,7 +198,7 @@ function showAddDoctor() {
     document.getElementById('listDoctor-content').style.display = 'none';
 
 }
-function showListDoctors(){
+function showListDoctors() {
 
     document.getElementById('listDoctor').style.backgroundColor = '#1E90FF';
     document.getElementById('listDoctor').style.color = '#FFF';
