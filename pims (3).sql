@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2025 at 05:54 AM
+-- Generation Time: Jun 13, 2025 at 07:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -38,7 +38,9 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_Id`, `admin_Email`, `admin_Password`) VALUES
-(1, 'user@gmail.com', '$2y$10$gF4eW0G33xeKx4PL92QR0um.4RM/gAv80lD/txYTFGfFXCK.0LWhG');
+(1, 'user@gmail.com', '$2y$10$gF4eW0G33xeKx4PL92QR0um.4RM/gAv80lD/txYTFGfFXCK.0LWhG'),
+(3, 'user2@gmail.com', '$2y$10$xnj4k5f.s29q/wYFpBdgieO1Np0Onas5MdHzYX09oNQDoGJjoYPGK'),
+(4, 'drushti@gmail.com', '$2y$10$4OJ9gQnjhbyq9Dwy/bzOcuFDtDDYFWzhwluO3AQV5FIcKOOaA7H32');
 
 -- --------------------------------------------------------
 
@@ -51,7 +53,8 @@ CREATE TABLE `appointments` (
   `user_Id` int(11) NOT NULL,
   `app_time` time NOT NULL,
   `app_date` date NOT NULL,
-  `visit_for` varchar(255) DEFAULT NULL
+  `visit_for` varchar(255) DEFAULT NULL,
+  `dept_id` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -79,8 +82,19 @@ CREATE TABLE `departments` (
   `dept_Email` varchar(100) NOT NULL,
   `dept_Phone` varchar(15) DEFAULT NULL,
   `dept_Password` varchar(255) NOT NULL,
-  `dept_Description` varchar(556) NOT NULL
+  `Dept_Description` varchar(556) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`dept_Id`, `hospital_Id`, `admin_Id`, `dept_Name`, `dept_Email`, `dept_Phone`, `dept_Password`, `Dept_Description`) VALUES
+(1, 1, 1, 'Cardiology Department', 'cardiology@gmail.com', '999999999', 'asdfghjk', 'Fixes hearts but not broken one,'),
+(2, 1, 1, 'Neurology Department', 'neuro@gmail.com', '999999999', '12345678', 'Fixing Brain but not empty one.'),
+(3, 1, 1, 'Orthology Department', 'ortho@gmail.com', '74136985', '1111111111', 'Broken Bones fixes here.'),
+(4, 3, 3, 'Spine Care Section', 'spineCivil@mail.com', '9876543210', '111111', 'We provide world best spine care.'),
+(5, 4, 4, 'Eye care', 'eye@gmail.com', '9876564332', '111111', 'we take care of your eyes');
 
 -- --------------------------------------------------------
 
@@ -100,6 +114,15 @@ CREATE TABLE `doctors` (
   `doct_Speacialist` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `doctors`
+--
+
+INSERT INTO `doctors` (`doct_Id`, `dept_Id`, `hospital_Id`, `admin_Id`, `doct_Email`, `doct_Password`, `doct_Name`, `doct_Phone`, `doct_Speacialist`) VALUES
+(1, 4, 3, 3, 'sarah@gmail.com', '111111', 'Sarah Pathak', '1234567890', 'spine Care Mastered Pho'),
+(2, 2, 1, 1, 'arvind@gmail.cm', '111111', 'Drushti gupta', '98747563210', 'Neurology Mster'),
+(4, 5, 4, 4, 'dru@gmail.com', '111111', 'Drushti gupta', '2345589876', 'mbbs');
+
 -- --------------------------------------------------------
 
 --
@@ -117,6 +140,15 @@ CREATE TABLE `hospitals` (
   `hospital_Time_open` time DEFAULT NULL,
   `hospital_Time_close` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `hospitals`
+--
+
+INSERT INTO `hospitals` (`hospital_Id`, `admin_Id`, `hospital_Name`, `hospital_Email`, `hospital_Lat`, `hospital_Long`, `hospital_Phone`, `hospital_Time_open`, `hospital_Time_close`) VALUES
+(1, 1, 'Appolo Hospital Bhat', 'appolo@gmail.com', 23.108149, 72.642289, '9876543210', '07:30:00', '22:30:00'),
+(3, 3, 'Civil Hospital Ahmedabad', 'civil@gmail.com', 23.052274, 72.604372, '1234567890', '00:00:00', '12:00:00'),
+(4, 4, 'drushti clinic', 'drushticlinic@gmail.com', 23.091059, 72.593665, '0987654321', '09:00:00', '22:00:00');
 
 -- --------------------------------------------------------
 
@@ -147,6 +179,14 @@ CREATE TABLE `user_details` (
   `user_Gender` enum('Male','Female','Other') DEFAULT NULL,
   `user_Address` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_details`
+--
+
+INSERT INTO `user_details` (`user_Id`, `user_Name`, `user_Email`, `user_Password`, `user_DOB`, `user_Phone`, `user_Gender`, `user_Address`) VALUES
+(1, 'anandaa jhaa', 'user@gmail.com', '$2y$10$kltw6zUpgHw1wzLJ3p6.BeF0pHn2d5sNXG/MMu8CysYKiM1O5GuoW', '1999-01-01', '1236798765432', 'Male', '01, winewood, loss angles'),
+(2, 'Drushti Gupta', 'urvish@gmail.com', '111111', '2005-06-07', '1234567892', 'Female', 'vijapur');
 
 -- --------------------------------------------------------
 
@@ -238,7 +278,7 @@ ALTER TABLE `visit`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `admin_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `appointments`
@@ -250,25 +290,25 @@ ALTER TABLE `appointments`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `dept_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `dept_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `doct_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `doct_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `hospitals`
 --
 ALTER TABLE `hospitals`
-  MODIFY `hospital_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `hospital_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `user_Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
