@@ -98,7 +98,7 @@ p{
     cursor: pointer;
 }
 
-.appTabNames:hover{
+.appTabNames:hover,.openTab{
     background-color: #1E90FF;
     color: #fff;
 }

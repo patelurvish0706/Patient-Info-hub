@@ -11,7 +11,8 @@ tabButtons.forEach(button => {
 
 // -------------------- DashBoard --- Flex Data and None other Tabs ---------------- 
 
-// dashboard -> Admin
+// ------------------------- Dashboard -> Admin ---------------------------
+
 function allAdminHidden() {
     document.getElementById('manageHospital').style.display = "none"
     document.getElementById('manageDepartment').style.display = "none"
@@ -40,7 +41,59 @@ function switchTabAdmin(tab) {
     }
 }
 
-// Dashboard -> User
+// ADDING and UPDATING -> DEPARTMENT
+
+function showAddDepartment() {
+
+    document.getElementById('listDepts').style.backgroundColor = '#FFF';
+    document.getElementById('listDepts').style.color = '#000';
+
+    document.getElementById('addDepts').style.backgroundColor = '#1E90FF';
+    document.getElementById('addDepts').style.color = '#FFF';
+
+    document.getElementById('addDepts-content').style.display = 'flex';
+    document.getElementById('listDepts-content').style.display = 'none';
+
+}
+
+function showListDepartment() {
+    document.getElementById('listDepts').style.backgroundColor = '#1E90FF';
+    document.getElementById('listDepts').style.color = '#FFF';
+
+    document.getElementById('addDepts').style.backgroundColor = '#FFF';
+    document.getElementById('addDepts').style.color = '#000';
+
+    document.getElementById('addDepts-content').style.display = 'none';
+    document.getElementById('listDepts-content').style.display = 'flex';
+}
+
+// ADDING and UPDATING -> DOCTORS
+
+function showAddDoctor() {
+
+    document.getElementById('listDoctor').style.backgroundColor = '#FFF';
+    document.getElementById('listDoctor').style.color = '#000';
+
+    document.getElementById('addDoctor').style.backgroundColor = '#1E90FF';
+    document.getElementById('addDoctor').style.color = '#FFF';
+
+    document.getElementById('addDoctor-content').style.display = 'flex';
+    document.getElementById('listDoctor-content').style.display = 'none';
+
+}
+function showListDoctors() {
+
+    document.getElementById('listDoctor').style.backgroundColor = '#1E90FF';
+    document.getElementById('listDoctor').style.color = '#FFF';
+
+    document.getElementById('addDoctor').style.backgroundColor = '#FFF';
+    document.getElementById('addDoctor').style.color = '#000';
+
+    document.getElementById('addDoctor-content').style.display = 'none';
+    document.getElementById('listDoctor-content').style.display = 'flex';
+}
+
+// ------------------------------ Dashboard -> User ----------------------------------
 
 function allUserHidden() {
     document.getElementById('myDetails').style.display = "none"
@@ -96,21 +149,41 @@ function switchUserApps(tab) {
         case 'all':
             allUserAppHidden();
             document.getElementById('AllApps-content').style.display = "flex"
+
+            document.getElementById('AllApps').classList.add('openTab');
+            document.getElementById('pendingApps').classList.remove('openTab');
+            document.getElementById('approvedApps').classList.remove('openTab');
+            document.getElementById('rejectedApps').classList.remove('openTab');
             break;
 
         case 'pending':
             allUserAppHidden();
             document.getElementById('pendingApps-content').style.display = "flex"
+
+            document.getElementById('AllApps').classList.remove('openTab');
+            document.getElementById('pendingApps').classList.add('openTab');
+            document.getElementById('approvedApps').classList.remove('openTab');
+            document.getElementById('rejectedApps').classList.remove('openTab');
             break;
 
         case 'approved':
             allUserAppHidden();
             document.getElementById('approvedApps-content').style.display = "flex"
+
+            document.getElementById('AllApps').classList.remove('openTab');
+            document.getElementById('pendingApps').classList.remove('openTab');
+            document.getElementById('approvedApps').classList.add('openTab');
+            document.getElementById('rejectedApps').classList.remove('openTab');
             break;
 
         case 'rejected':
             allUserAppHidden();
             document.getElementById('rejectedApps-content').style.display = "flex"
+
+            document.getElementById('AllApps').classList.remove('openTab');
+            document.getElementById('pendingApps').classList.remove('openTab');
+            document.getElementById('approvedApps').classList.remove('openTab');
+            document.getElementById('rejectedApps').classList.add('openTab');
             break;
 
         default:
@@ -118,7 +191,9 @@ function switchUserApps(tab) {
     }
 }
 
-// Dashboard -> Department
+
+
+// --------------------------- Dashboard -> Department -----------------------------------
 
 function allDepartmentHidden() {
     document.getElementById('requests').style.display = "none"
@@ -143,7 +218,7 @@ function switchTabDept(tab) {
 }
 
 
-// Logout
+// --------------------------- Logouts ------------------------------------
 
 function LogoutAdmin() {
     window.location.href = "script/admin_logout.php";
@@ -158,54 +233,3 @@ function dataUpdated() {
     alert('Your Department Information is updated successfully.');
 }
 
-// ADDING and UPDATING -> DEPARTMENT
-
-function showAddDepartment() {
-
-    document.getElementById('listDepts').style.backgroundColor = '#FFF';
-    document.getElementById('listDepts').style.color = '#000';
-
-    document.getElementById('addDepts').style.backgroundColor = '#1E90FF';
-    document.getElementById('addDepts').style.color = '#FFF';
-
-    document.getElementById('addDepts-content').style.display = 'flex';
-    document.getElementById('listDepts-content').style.display = 'none';
-
-}
-
-function showListDepartment() {
-    document.getElementById('listDepts').style.backgroundColor = '#1E90FF';
-    document.getElementById('listDepts').style.color = '#FFF';
-
-    document.getElementById('addDepts').style.backgroundColor = '#FFF';
-    document.getElementById('addDepts').style.color = '#000';
-
-    document.getElementById('addDepts-content').style.display = 'none';
-    document.getElementById('listDepts-content').style.display = 'flex';
-}
-
-// ADDING and UPDATING -> DOCTORS
-
-function showAddDoctor() {
-
-    document.getElementById('listDoctor').style.backgroundColor = '#FFF';
-    document.getElementById('listDoctor').style.color = '#000';
-
-    document.getElementById('addDoctor').style.backgroundColor = '#1E90FF';
-    document.getElementById('addDoctor').style.color = '#FFF';
-
-    document.getElementById('addDoctor-content').style.display = 'flex';
-    document.getElementById('listDoctor-content').style.display = 'none';
-
-}
-function showListDoctors() {
-
-    document.getElementById('listDoctor').style.backgroundColor = '#1E90FF';
-    document.getElementById('listDoctor').style.color = '#FFF';
-
-    document.getElementById('addDoctor').style.backgroundColor = '#FFF';
-    document.getElementById('addDoctor').style.color = '#000';
-
-    document.getElementById('addDoctor-content').style.display = 'none';
-    document.getElementById('listDoctor-content').style.display = 'flex';
-}
