@@ -32,7 +32,7 @@ $stmt = $conn->prepare("INSERT INTO departments (hospital_Id, admin_Id, dept_Nam
 $stmt->bind_param("iisssss", $hospitalId, $adminId, $name, $email, $phone, $hashedPassword, $description);
 
 if ($stmt->execute()) {
-    echo "<script>alert('Department added successfully.'); window.location.href='../dashboard_admin.php';</script>";
+    echo "<script>window.history.back();</script>";
 } else {
     echo "<script>alert('Failed to add department: " . $stmt->error . "'); window.history.back();</script>";
 }

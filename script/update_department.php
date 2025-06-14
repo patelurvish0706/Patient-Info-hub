@@ -51,7 +51,7 @@ $update->bind_param("sssssi", $name, $email, $phone, $hashed, $description, $dep
 
 if ($update->execute()) {
     // echo "<script>alert('Department updated.'); window.history.back();";
-    echo "<script>  window.history.back();</script>";
+    echo "<script> window.history.back();</script>";
 } else {
     echo "<script>alert('Update failed: ". $update->error ."'); history.back();</script>";
 }

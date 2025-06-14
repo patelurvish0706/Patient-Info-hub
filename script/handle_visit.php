@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['app_Id'], $_POST['sta
     $stmt->bind_param("iss", $app_Id, $status, $current_time);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Visit marked as $status'); window.history.back();</script>";
+        echo "<script>window.history.back();</script>";
     } else {
         echo "<script>alert('Error saving visit.'); window.history.back();</script>";
     }

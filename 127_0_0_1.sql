@@ -319,3 +319,40 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+/*------------------------------------------------------------
+-------To Reset All Database Without Altering Structure.------
+--------------------------------------------------------------
+
+USE pims;
+
+-- Disable foreign key checks
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Delete data from all tables
+DELETE FROM visit;
+DELETE FROM report;
+DELETE FROM approval;
+DELETE FROM appointments;
+DELETE FROM doctors;
+DELETE FROM departments;
+DELETE FROM hospitals;
+DELETE FROM user_details;
+DELETE FROM admin;
+
+-- Reset AUTO_INCREMENT values
+ALTER TABLE visit AUTO_INCREMENT = 1;
+ALTER TABLE report AUTO_INCREMENT = 1;
+ALTER TABLE approval AUTO_INCREMENT = 1;
+ALTER TABLE appointments AUTO_INCREMENT = 1;
+ALTER TABLE doctors AUTO_INCREMENT = 1;
+ALTER TABLE departments AUTO_INCREMENT = 1;
+ALTER TABLE hospitals AUTO_INCREMENT = 1;
+ALTER TABLE user_details AUTO_INCREMENT = 1;
+ALTER TABLE admin AUTO_INCREMENT = 1;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+-----------------------------------------------------------*/

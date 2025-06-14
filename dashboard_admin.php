@@ -51,16 +51,23 @@ $conn->close();
             flex-direction: column;
         }
 
+        #manageDepartment,
+        #manageDoctor {
+            display: none;
+        }
+
         #map {
             width: 100%;
             height: 300px;
         }
 
-        #listDepts-content,#listDoctor-content {
+        #listDepts-content,
+        #listDoctor-content {
             flex-direction: column;
         }
 
-        #addDepts,#addDoctor {
+        #addDepts,
+        #addDoctor {
             background-color: #1E90FF;
             color: #fff;
         }
@@ -97,7 +104,7 @@ $conn->close();
 
         <div id="leftDataBar">
 
-            <div id="manageHospital" style="display: flex;">
+            <div id="manageHospital">
                 <h2>Manage Hospital</h2>
                 <div id="listApps">
                     <div id="newHospt" class="appTabNames">Hospital</div>
@@ -143,42 +150,35 @@ $conn->close();
 
                         $conn->close();
                         ?>
-                        <form action="script/submit_hospital.php" method="post">
+                        <form action="script/submit_hospital.php" method="post" id="Hospital-info-submit">
                             <p><b>Must Fill Hospital Detail Before Creating Departments.</b></p>
 
                             <label for="hospital-name">Hospital Name:</label>
-                            <input type="text" name="hospital-name" id="hospital-name"
-                                placeholder="The Great Civil Hospital, Ahmedabad"
-                                value="<?= htmlspecialchars($hospitalName) ?>" required>
+                            <input type="text" name="hospital-name" id="hospital-name" placeholder="" value="<?= htmlspecialchars($hospitalName) ?>" required>
 
                             <label for="hospital-email">Hospital Email:</label>
-                            <input type="email" name="hospital-email" id="hospital-email"
-                                placeholder="hospital@email.com" value="<?= htmlspecialchars($hospitalEmail) ?>"
-                                required>
+                            <input type="email" name="hospital-email" id="hospital-email" placeholder="" value="<?= htmlspecialchars($hospitalEmail) ?>" required>
 
-                            <label>Time:</label>
-                            Open at <input type="time" name="hospital-time-open" id="hospital-time-open"
-                                value="<?= $timeOpen ?>" required>
-                            Close at <input type="time" name="hospital-time-close" id="hospital-time-close"
-                                value="<?= $timeClose ?>" required>
+                            <label style="color:#f00a;">Set Open and Close time as 12:00 AM to 12:00 PM for 24x7.</label>
+
+                            <label>Open at:</label>
+                            <input type="time" name="hospital-time-open" id="hospital-time-open" value="<?= $timeOpen ?>" required>
+                            <label>Close at:</label>
+                            <input type="time" name="hospital-time-close" id="hospital-time-close" value="<?= $timeClose ?>" required>
 
                             <label for="hospital-phone">Phone:</label>
-                            <input type="number" name="hospital-phone" id="hospital-phone" placeholder="9876543210"
-                                value="<?= htmlspecialchars($phone) ?>" required>
+                            <input type="number" name="hospital-phone" id="hospital-phone" placeholder="" value="<?= htmlspecialchars($phone) ?>" required>
 
-                            <label for="hospital-loc">Select Location:</label>
+                            <label>Select Location:</label>
                             <div id="map" name="hospital-loc"></div>
 
                             <label for="hospital-latitude">Hospital Latitude</label>
-                            <input type="number" name="hospital-latitude" id="hospital-latitude" step="any"
-                                value="<?= $lat ?>" required>
+                            <input type="number" name="hospital-latitude" id="hospital-latitude" step="any" value="<?= $lat ?>" required>
 
                             <label for="hospital-longitude">Hospital Longitude</label>
-                            <input type="number" name="hospital-longitude" id="hospital-longitude" step="any"
-                                value="<?= $long ?>" required>
+                            <input type="number" name="hospital-longitude" id="hospital-longitude" step="any" value="<?= $long ?>" required>
 
-                            <!-- <button type="submit" onclick="validateHospitalSub(event);">Save Details</button> -->
-                            <button type="submit">Save Details</button>
+                            <button type="submit" onclick="validateHospitalSub(event);">Save Details</button>
                         </form>
                         <script>
                             let map, marker;
@@ -237,30 +237,25 @@ $conn->close();
                 <div id="appsContainer">
                     <div id="addDepts-content" style="display:flex;">
 
-                        <form action="script/submit_department.php" method="post">
+                        <form action="script/submit_department.php" method="post" id="department-info-submit">
                             <p><b>Creating New Department.</b></p>
 
                             <label for="department-name">Department Name:</label>
-                            <input type="text" name="department_name" id="department-name"
-                                placeholder="Cardiology section" required>
+                            <input type="text" name="department_name" id="department-name" placeholder="" required>
 
                             <label for="department-email">Department Email:</label>
-                            <input type="email" name="department_email" id="department-email"
-                                placeholder="department@email.com" required>
+                            <input type="email" name="department_email" id="department-email" placeholder="" required>
 
                             <label for="department-phone">Phone:</label>
-                            <input type="number" name="department_phone" id="department-phone" placeholder="9876543210"
-                                required>
+                            <input type="number" name="department_phone" id="department-phone" placeholder=""  required>
 
                             <label for="department-password">Set Password:</label>
-                            <input type="password" name="department_password" id="department-password"
-                                placeholder="********" required>
+                            <input type="password" name="department_password" id="department-password" placeholder="" required>
 
-                            <label for="department-description">Description:</label>
-                            <input type="text" name="department_description" id="department-description"
-                                placeholder="Surgery of heart. Emergency Services and Transplant." required>
+                            <label for="department-description">Description: (What Services This Department Provide.)</label>
+                            <input type="text" name="department_description" id="department-description" placeholder="" required>
 
-                            <button type="submit">Save Details</button>
+                            <button type="submit" onclick="validateDepartmentSub(event)">Save Details</button>
                         </form>
 
                     </div>
@@ -269,10 +264,6 @@ $conn->close();
                         <?php
                         include 'script/db_connection.php';     // adjust path as needed
                         
-                        /* ────────── SECURITY ────────── */
-                        // if (!isset($_SESSION['admin_Id']) || !isset($_SESSION['hospital_Id'])) {
-                        //     die("Please fill Hospital Details first.");
-                        // }
                         $hospitalId = $_SESSION['hospital_Id'];
 
                         /* ────────── FETCH ALL DEPARTMENTS FOR THIS HOSPITAL ────────── */
@@ -289,7 +280,7 @@ $conn->close();
                         ?>
 
                         <?php while ($row = $departments->fetch_assoc()): ?>
-                            <form  action="script/update_department.php" method="post">
+                            <form action="script/update_department.php" method="post">
                                 <input type="hidden" name="dept_id" value="<?= $row['dept_Id']; ?>">
 
                                 <label>Department Name:</label>
@@ -311,7 +302,7 @@ $conn->close();
                                 <input type="text" name="dept_description"
                                     value="<?= htmlspecialchars($row['dept_Description']); ?>" required>
 
-                                <button type="submit" onclick="dataUpdated()">Update Department</button>
+                                <button type="submit" onclick="departmentUpdated()">Update Department</button>
                             </form>
                         <?php endwhile;
                         $stmt->close();
@@ -346,23 +337,20 @@ $conn->close();
                         $departments = $stmt->get_result();
                         ?>
 
-                        <form action="script/submit_doctor.php" method="post">
+                        <form action="script/submit_doctor.php" method="post" id="doctor-info-submit">
                             <p><b>Creating New Doctor Profile.</b></p>
 
                             <label for="doctor-name">Doctor Name:</label>
-                            <input type="text" name="doctor_name" id="doctor-name" placeholder="Sarah Smith" required>
+                            <input type="text" name="doctor_name" id="doctor-name" placeholder="" required>
 
                             <label for="doctor-email">Doctor Email:</label>
-                            <input type="email" name="doctor_email" id="doctor-email" placeholder="doctor@email.com"
-                                required>
+                            <input type="email" name="doctor_email" id="doctor-email" placeholder="" required>
 
                             <label for="doctor-phone">Phone:</label>
-                            <input type="number" name="doctor_phone" id="doctor-phone" placeholder="9876543210"
-                                required>
+                            <input type="number" name="doctor_phone" id="doctor-phone" placeholder="" required>
 
                             <label for="doctor-password">Set Password:</label>
-                            <input type="password" name="doctor_password" id="doctor-password" placeholder="••••••"
-                                required>
+                            <input type="password" name="doctor_password" id="doctor-password" placeholder="" required>
 
                             <label for="doctor-department">Department:</label>
                             <select name="doctor_department" id="doctor-department" required>
@@ -374,13 +362,10 @@ $conn->close();
                             </select>
 
                             <label for="doctor-description">Specialist:</label>
-                            <input type="text" name="doctor_description" id="doctor-description"
-                                placeholder="Neurologist PhD" required>
+                            <input type="text" name="doctor_description" id="doctor-description" placeholder="" required>
 
-                            <button type="submit">Save Details</button>
+                            <button type="submit" onclick="validateDoctorSub(event)">Save Details</button>
                         </form>
-
-
                     </div>
 
                     <div id="listDoctor-content" style="display:none;">
@@ -414,8 +399,7 @@ $conn->close();
                         ?>
 
                         <?php while ($doctor = $doctors->fetch_assoc()): ?>
-                            <form action="script/update_doctor.php" method="post"
-                                style="margin-bottom: 25px;">
+                            <form action="script/update_doctor.php" method="post" style="margin-bottom: 25px;">
                                 <input type="hidden" name="doct_id" value="<?= $doctor['doct_Id'] ?>">
 
                                 <label for="doctor-name">Doctor Name:</label>
@@ -447,7 +431,7 @@ $conn->close();
                                 <input type="text" name="doctor_description"
                                     value="<?= htmlspecialchars($doctor['doct_Speacialist']) ?>" required>
 
-                                <button type="submit">Update Doctor</button>
+                                <button type="submit" onclick="doctorUpdated()">Update Doctor</button>
                             </form>
                         <?php endwhile; ?>
 

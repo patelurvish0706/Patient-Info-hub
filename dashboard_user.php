@@ -132,7 +132,7 @@ $user = $result->fetch_assoc();
         <div id="leftDataBar">
 
             <div id="myDetails">
-                <form action="script/user_update.php" method="post">
+                <form action="script/user_update.php" method="post" id="user-det-update">
                     <h2>My Details</h2>
                     <p>You can change or modify your details as required.</p>
 
@@ -146,11 +146,10 @@ $user = $result->fetch_assoc();
                     <label for="reg-user-gender">Gender:</label>
                     <select name="reg-user-gender" id="reg-user-gender" required>
                         <option value="" disabled>Select your gender</option>
-                        <option value="male" <?= $user['user_Gender'] === 'male' ? 'selected' : '' ?>>Male</option>
-                        <option value="female" <?= $user['user_Gender'] === 'female' ? 'selected' : '' ?>>Female</option>
-                        <option value="other" <?= $user['user_Gender'] === 'other' ? 'selected' : '' ?>>Other</option>
-                        <option value="prefer_not_to_say" <?= $user['user_Gender'] === 'prefer_not_to_say' ? 'selected' : '' ?>>Prefer not to say</option>
-                    </select>
+                        <option value="male" <?= $user['user_Gender'] === 'Male' ? 'selected' : '' ?>>Male</option>
+                        <option value="female" <?= $user['user_Gender'] === 'Female' ? 'selected' : '' ?>>Female</option>
+                        <option value="other" <?= $user['user_Gender'] === 'Other' ? 'selected' : '' ?>>Other</option>
+                     </select>
 
                     <label for="reg-user-phone">Phone:</label>
                     <input type="number" name="reg-user-phone" id="reg-user-phone"
@@ -160,7 +159,7 @@ $user = $result->fetch_assoc();
                     <input type="text" name="reg-user-address" id="reg-user-address"
                         value="<?= htmlspecialchars($user['user_Address']) ?>" required>
 
-                    <button type="submit">Save Details</button>
+                    <button type="submit" onclick="validateUserDetUpdated(event);">Save Details</button>
                 </form>
             </div>
 
@@ -210,7 +209,7 @@ $user = $result->fetch_assoc();
 
                 <!-- Appointment Form -->
                 <div id="appointment-form" class="appointment-form">
-                    <form action="script/submit_appointment.php" method="post">
+                    <form action="script/submit_appointment.php" method="post" id="user-app-book">
                         <span id="hospital_name_display"></span>
                         <span id="dept_name_display"></span>
 
@@ -227,7 +226,7 @@ $user = $result->fetch_assoc();
                         <input type="text" name="visit_for" id="visit_for" required>
 
                         <div>
-                            <button type="submit">Submit Appointment</button>
+                            <button type="submit" onclick="validateAppSub(event);">Submit Appointment</button>
                             <button type="button" onclick="goBack()">Cancel</button>
                         </div>
                     </form>
@@ -341,6 +340,7 @@ $user = $result->fetch_assoc();
         </div>
     </section>
 
+    <script src="script/validate.js"></script>
     <script src="script/dashboard.js"></script>
     <script>
         allUserHidden();

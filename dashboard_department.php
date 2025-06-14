@@ -82,7 +82,7 @@ $data = $result->fetch_assoc();
 
                 // Check if department is logged in
                 if (!isset($_SESSION['dept_Id'])) {
-                    echo "<script>alert('Unauthorized access. Please login first.'); window.location.href = 'index.php';</script>";
+                    echo "window.location.href = 'manage.html';</script>";
                     exit;
                 }
 
@@ -105,7 +105,7 @@ $data = $result->fetch_assoc();
                     function hideAppCard(appId) {
                         const card = document.getElementById("appCard-" + appId);
                         if (card) {
-                            alert("Request submitted successfully.");
+                            alert("Patient Appointment Managed Successfully.✅");
                             card.style.display = "none";
                         }
                         return true; // Continue with form submission
@@ -150,6 +150,7 @@ $data = $result->fetch_assoc();
                     function hideAppAttendCard(appId) {
                         const card = document.getElementById("appAttendCard-" + appId);
                         if (card) {
+                            alert("Patient Attendence Managed Successfully.✅");
                             card.style.display = "none";
                         }
                         return true; // Continue with form submission
@@ -207,7 +208,7 @@ $data = $result->fetch_assoc();
             </div>
 
             <div id="present">
-                <h2>Visited Clients</h2>
+                <h2>Present Available Clients</h2>
 
                 <?php
                 include 'script/db_connection.php';

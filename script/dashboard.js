@@ -236,8 +236,3 @@ function LogoutUser() {
     window.location.href = "script/user_logout.php";
 }
 
-function dataUpdated() {
-    switchTabAdmin('mngDprtmnt');
-    alert('Your Department Information is updated successfully.');
-}
-

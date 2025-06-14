@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['app_Id'], $_POST['sta
         $insertStmt->close();
     }
 
-    echo "<script>alert('Appointment $status successfully.'); window.history.back();</script>";
+    echo "<script>window.history.back();</script>";
 } else {
     echo "<script>alert('Invalid request.'); history.back();</script>";
 }

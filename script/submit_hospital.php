@@ -53,7 +53,7 @@ if ($result->num_rows > 0) {
     $insert->bind_param("isssssdd", $adminId, $name, $email, $timeOpen, $timeClose, $phone, $lat, $long);
 
     if ($insert->execute()) {
-        echo "Hospital registered successfully.";
+        echo "<script>window.history.back();</script>";
     } else {
         echo "Error inserting hospital: " . $insert->error;
     }

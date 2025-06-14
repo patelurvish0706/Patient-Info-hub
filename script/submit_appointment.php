@@ -17,7 +17,7 @@ $stmt = $conn->prepare("INSERT INTO appointments (user_Id, app_time, app_date, v
 $stmt->bind_param("issss", $userId, $appTime, $appDate, $visitFor, $deptId);
 
 if ($stmt->execute()) {
-    echo "<script>alert('Appointment booked successfully!'); window.history.back();</script>";
+    echo "<script>window.history.back();</script>";
 } else {
     echo "<script>alert('Error booking appointment.'); history.back();</script>";
 }
