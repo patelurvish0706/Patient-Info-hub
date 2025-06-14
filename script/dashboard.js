@@ -198,6 +198,8 @@ function switchUserApps(tab) {
 function allDepartmentHidden() {
     document.getElementById('requests').style.display = "none"
     document.getElementById('attendence').style.display = "none"
+    document.getElementById('present').style.display = "none"
+
 }
 
 function switchTabDept(tab) {
@@ -211,6 +213,12 @@ function switchTabDept(tab) {
             allDepartmentHidden()
             document.getElementById('attendence').style.display = "flex"
             break;
+
+        case 'present':
+            allDepartmentHidden()
+            document.getElementById('present').style.display = "flex"
+            break
+            ;
 
         default:
             break;
