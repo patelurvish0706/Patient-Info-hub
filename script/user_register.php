@@ -38,7 +38,7 @@ $stmt = $conn->prepare("INSERT INTO user_details (user_Name, user_Email, user_Pa
 $stmt->bind_param("sssssss", $name, $email, $hashedPassword, $dob, $phone, $gender, $address);
 
 if ($stmt->execute()) {
-    echo "window.location.href = '../login.html';</script>";
+    echo "<script>window.location.href = '../login.html';</script>";
 } else {
     echo "<script>alert('Something went wrong during registration.'); history.back();</script>";
 }

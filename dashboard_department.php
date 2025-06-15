@@ -122,7 +122,7 @@ $data = $result->fetch_assoc();
                                 <?= htmlspecialchars($row['app_time']) ?></p>
                             <p><strong>Visit For:</strong> <?= htmlspecialchars($row['visit_for']) ?></p>
 
-                            <form action="script/handle_approval.php" method="post" style="margin-top:10px;"
+                            <form action="script/handle_approval.php" method="post" style="flex-direction:row;padding:0 10px;"
                                 onsubmit="return hideAppCard(<?= $row['app_Id'] ?>)">
                                 <input type="hidden" name="app_Id" value="<?= $row['app_Id'] ?>">
                                 <button type="submit" name="status" value="Approved">Approve</button>

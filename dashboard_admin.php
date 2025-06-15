@@ -159,7 +159,7 @@ $conn->close();
                             <label for="hospital-email">Hospital Email:</label>
                             <input type="email" name="hospital-email" id="hospital-email" placeholder="" value="<?= htmlspecialchars($hospitalEmail) ?>" required>
 
-                            <label style="color:#f00a;">Set Open and Close time as 12:00 AM to 12:00 PM for 24x7.</label>
+                            <label style="color:#f00a;">Set Open and Close time as 12:00 AM to 11:59 PM for 24x7.</label>
 
                             <label>Open at:</label>
                             <input type="time" name="hospital-time-open" id="hospital-time-open" value="<?= $timeOpen ?>" required>

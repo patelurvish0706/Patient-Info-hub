@@ -101,11 +101,11 @@
                     <label for="login-doctor-password">Doctor Password:</label>
                     <input type="password" name="login-doctor-password" id="login-doctor-password" placeholder="••••••••">
 
-                    <button type="submit">Login As Doctor</button>
+                    <button type="submit" onclick="validateDocLog(event);">Login As Doctor</button>
 
-                    <label for="">Department Section ? <div class="link" onclick="deprt_Login()">Department Login</div>
+                    <label>Department Section ? <div class="link" onclick="deprt_Login()">Department Login</div>
                     </label>
-                    <label for="">Forgot Password? <div class="link">Get new Password</div></label>
+                    <label>Forgot Password? <div class="link">Get new Password</div></label>
                 </form>
 
                 <!-- Department Login -->
@@ -119,7 +119,7 @@
                     <input type="password" name="login-deprt-password" id="login-deprt-password"
                         placeholder="••••••••">
 
-                    <button type="submit">Register As Department</button>
+                    <button type="submit" onclick="validateDeptLog(event)">Register As Department</button>
                     <label for="">You are Doctor ? <div class="link" onclick="doctor_Login()">Login as Doctor.</div>
                     </label>
                 </form>

@@ -191,15 +191,12 @@ function switchUserApps(tab) {
     }
 }
 
-
-
 // --------------------------- Dashboard -> Department -----------------------------------
 
 function allDepartmentHidden() {
     document.getElementById('requests').style.display = "none"
     document.getElementById('attendence').style.display = "none"
     document.getElementById('present').style.display = "none"
-
 }
 
 function switchTabDept(tab) {
@@ -225,6 +222,29 @@ function switchTabDept(tab) {
     }
 }
 
+// --------------------------- Dashboard -> Doctor -----------------------------------
+
+function allDocTabHidden() {
+    document.getElementById('listPatients').style.display = "none"
+    document.getElementById('submitedReps').style.display = "none"
+}
+
+function switchTabDoc(tab) {
+    switch (tab) {
+        case 'listPatients':
+            allDocTabHidden()
+            document.getElementById('listPatients').style.display = "flex"
+            break;
+
+        case 'submitedReps':
+            allDocTabHidden()
+            document.getElementById('submitedReps').style.display = "flex"
+            break;
+
+        default:
+            break;
+    }
+}
 
 // --------------------------- Logouts ------------------------------------
 

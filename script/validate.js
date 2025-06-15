@@ -31,7 +31,6 @@ function validateAdminReg(event) {
     const password = document.getElementById("register-admin-password").value.trim();
     const repassword = document.getElementById("register-admin-repassword").value.trim();
 
-    // Simple validation
     if (!email || !password || !repassword) {
         alert("Please fill in all fields.");
         return;
@@ -57,6 +56,60 @@ function validateAdminReg(event) {
     form.submit();
 
     alert("Admin Registered Successfully.✅");
+}
+
+/* Doctor Login */
+function validateDocLog(event) {
+    const form = document.getElementById("doctor-login");
+    event.preventDefault();
+
+    const email = document.getElementById("login-doctor-email").value.trim();
+    const password = document.getElementById("login-doctor-password").value.trim();
+
+    if (!email || !password) {
+        alert("Please fill in both email and password.");
+        return;
+    }
+
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    if (password.length < 5) {
+        alert("Invalid Password");
+        return;
+    }
+
+    form.submit();
+}
+
+/* Department Login */
+function validateDeptLog(event) {
+    const form = document.getElementById("department-login");
+    event.preventDefault();
+
+    const email = document.getElementById("login-deprt-email").value.trim();
+    const password = document.getElementById("login-deprt-password").value.trim();
+
+    if (!email || !password) {
+        alert("Please fill in both email and password.");
+        return;
+    }
+
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    if (password.length < 5) {
+        alert("Invalid Password");
+        return;
+    }
+
+    form.submit();
 }
 
 // --- Dashboard_Admin.php ---
@@ -320,6 +373,27 @@ function validateAppSub(event) {
     document.getElementById('appointment-form').style.display = 'none';
 }
 
-// --- Dashboard_Department.php ---
+// --- Dashboard_Doctor.php ---
 
+function validateRepSub(event) {
+    const form = document.getElementById("reportForm");
+    event.preventDefault();
 
+    const outcome = form.querySelector('textarea[name="checkup_outcome"]').value.trim();
+  const prescriptions = form.querySelector('textarea[name="prescriptions"]').value.trim();
+  const suggestion = form.querySelector('textarea[name="suggestion"]').value.trim();
+
+  if (!outcome || !prescriptions || !suggestion) {
+    alert("Please fill in all the fields.");
+    return;
+  }
+
+  // Show alert, then submit
+  alert("Patient Report Submitted Successfully.✅");
+
+  // Small delay to allow alert to finish before submitting
+  setTimeout(() => {
+    form.submit();
+  }, 50);
+  
+}
