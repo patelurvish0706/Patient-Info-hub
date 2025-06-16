@@ -449,13 +449,12 @@ $user = $result->fetch_assoc();
 
                 $user_Id = $_SESSION['user_Id'];
 
-                // Fetch latest prescriptions and visit reasons
+                // Fetch only appointments with an existing report
                 $sql = "SELECT a.app_Id, a.visit_for, a.app_date, a.app_time, r.prescriptions
                         FROM appointments a
-                        LEFT JOIN report r ON a.app_Id = r.app_Id
+                        INNER JOIN report r ON a.app_Id = r.app_Id
                         WHERE a.user_Id = ?
-                        ORDER BY a.app_date DESC, a.app_time DESC
-                    ";
+                        ORDER BY a.app_date DESC, a.app_time DESC";
 
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $user_Id);
