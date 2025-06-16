@@ -24,7 +24,7 @@ $user = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIMS - Health Board</title>
+    <title>User Portal ❤️ - PIMS</title>
     <link rel="stylesheet" href="style/navbar.css">
     <link rel="stylesheet" href="style/form.css">
     <link rel="stylesheet" href="style/style.css">

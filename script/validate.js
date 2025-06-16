@@ -375,6 +375,7 @@ function validateAppSub(event) {
 
 // --- Dashboard_Doctor.php ---
 
+// Submiting Report 
 function validateRepSub(event) {
     const form = document.getElementById("reportForm");
     event.preventDefault();
@@ -396,4 +397,30 @@ function validateRepSub(event) {
     form.submit();
   }, 50);
   
+}
+
+// Updating report
+function validateUpdateRepDoc(event) {
+    event.preventDefault(); // Stop default form submission
+
+    const form = document.getElementById("update-rep-doc");
+
+    const outcome = form.querySelector('textarea[name="checkup_outcome"]').value.trim();
+    const prescriptions = form.querySelector('textarea[name="prescriptions"]').value.trim();
+    const suggestion = form.querySelector('textarea[name="suggestion"]').value.trim();
+
+    // Basic field validation
+    if (!outcome || !prescriptions || !suggestion) {
+        alert("All fields are required.");
+        return;
+    }
+
+    // Optionally: you can add more detailed checks here
+
+    alert("Report updated successfully.✅");
+
+    // Slight delay to ensure alert is seen before submission
+    setTimeout(() => {
+        form.submit();
+    }, 50);
 }

@@ -31,7 +31,7 @@ $_SESSION['dept_Id'] = $doctors['dept_Id'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIMS - Health Board</title>
+    <title>Doctor Portal 👩🏻‍⚕️ - PIMS</title>
     <link rel="stylesheet" href="style/navbar.css">
     <link rel="stylesheet" href="style/form.css">
     <link rel="stylesheet" href="style/style.css">
@@ -179,6 +179,71 @@ $_SESSION['dept_Id'] = $doctors['dept_Id'];
 
             <div id="submitedReps">
                 <h2>Today's Reports</h2>
+
+                <?php
+                // session_start();
+                include 'script/db_connection.php';
+
+                if (!isset($_SESSION['doct_Id'])) {
+                    header("Location: ../manage.html");
+                    exit;
+                }
+
+                $doct_Id = $_SESSION['doct_Id'];
+
+                // Get dept_Id of doctor
+                $stmt = $conn->prepare("SELECT dept_Id FROM doctors WHERE doct_Id = ?");
+                $stmt->bind_param("i", $doct_Id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                $dept_Id = $row['dept_Id'];
+
+                // Fetch reports for patients in this department
+                $sql = "SELECT r.app_Id, r.checkup_outcome, r.prescriptions, r.suggestion,
+               u.user_Name, a.visit_for, a.app_date
+        FROM report r
+        JOIN appointments a ON r.app_Id = a.app_Id
+        JOIN user_details u ON a.user_Id = u.user_Id
+        WHERE a.dept_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $dept_Id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                ?>
+
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <form action="script/update_report_process.php" id="update-rep-doc" method="post"
+                            style="border:1px solid #ccc; padding:15px; margin-bottom:15px;">
+                            <input type="hidden" name="app_Id" value="<?= $row['app_Id'] ?>">
+
+                            <p><strong>User:</strong> <?= htmlspecialchars($row['user_Name']) ?></p>
+                            <p><strong>Visit For:</strong> <?= htmlspecialchars($row['visit_for']) ?></p>
+                            <p><strong>Date:</strong> <?= htmlspecialchars($row['app_date']) ?></p>
+                            
+                            <label>Checkup Outcome:</label>
+                            <textarea name="checkup_outcome"
+                                required><?= htmlspecialchars($row['checkup_outcome']) ?></textarea>
+
+                            <label>Prescriptions:</label>
+                            <textarea name="prescriptions" required><?= htmlspecialchars($row['prescriptions']) ?></textarea>
+
+                            <label>Suggestion:</label>
+                            <textarea name="suggestion" required><?= htmlspecialchars($row['suggestion']) ?></textarea>
+
+                            <button type="submit" onclick="validateUpdateRepDoc(event)">Update Report</button>
+                        </form>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>No reports found for your department.</p>
+                <?php endif; ?>
+
+                <?php
+                $stmt->close();
+                $conn->close();
+                ?>
+
             </div>
 
         </div>

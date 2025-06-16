@@ -27,7 +27,7 @@ $data = $result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIMS - Health Board</title>
+    <title>Department Portal 🏬 - PIMS</title>
     <link rel="stylesheet" href="style/navbar.css">
     <link rel="stylesheet" href="style/form.css">
     <link rel="stylesheet" href="style/style.css">
@@ -252,8 +252,7 @@ $data = $result->fetch_assoc();
 
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
-                        <div class="visited-card" id="visitCard-<?= $row['app_Id'] ?>"
-                            style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                        <div class="visited-card" id="visitCard-<?= $row['app_Id'] ?>" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
                             <p><strong>Name:</strong> <?= htmlspecialchars($row['user_Name']) ?></p>
                             <p><strong>Gender:</strong> <?= htmlspecialchars($row['user_Gender']) ?></p>
                             <p><strong>Visit For:</strong> <?= htmlspecialchars($row['visit_for']) ?></p>
