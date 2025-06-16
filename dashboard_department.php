@@ -219,14 +219,17 @@ $data = $result->fetch_assoc();
 
                 $dept_Id = $_SESSION['dept_Id'];
 
-                // Fetch all 'Visited' clients for this department
-                $sql = "SELECT v.app_Id, v.Visit_Time, a.app_date, a.app_time, a.visit_for,
-                        u.user_Name, u.user_Gender
-                        FROM visit v
-                        JOIN appointments a ON v.app_Id = a.app_Id
-                        JOIN user_details u ON a.user_Id = u.user_Id
-                        WHERE a.dept_id = ? AND v.Visit_Status = 'Visited'
-                        ORDER BY a.app_date DESC, v.Visit_Time DESC";
+                // Fetch all 'Visited' clients for this department along with check if report exists
+                $sql = "SELECT 
+                v.app_Id, v.Visit_Time, a.app_date, a.app_time, a.visit_for,
+                u.user_Name, u.user_Gender,
+                r.app_Id AS report_exists
+            FROM visit v
+            JOIN appointments a ON v.app_Id = a.app_Id
+            JOIN user_details u ON a.user_Id = u.user_Id
+            LEFT JOIN report r ON v.app_Id = r.app_Id
+            WHERE a.dept_id = ? AND v.Visit_Status = 'Visited'
+            ORDER BY a.app_date DESC, v.Visit_Time DESC";
 
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $dept_Id);
@@ -237,22 +240,23 @@ $data = $result->fetch_assoc();
                 <script>
                     function deleteVisitCard(appId) {
                         const card = document.getElementById("visitCard-" + appId);
-                            fetch("script/delete_visit.php", {
-                                method: "POST",
-                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                body: "app_Id=" + encodeURIComponent(appId)
-                            })
-                                .then(response => response.text())
-                                .then(data => {
-                                    // alert(data);
-                                    if (card) card.style.display = "none";
-                                });
-                        }
+                        fetch("script/delete_visit.php", {
+                            method: "POST",
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: "app_Id=" + encodeURIComponent(appId)
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                // alert(data);
+                                if (card) card.style.display = "none";
+                            });
+                    }
                 </script>
 
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
-                        <div class="visited-card" id="visitCard-<?= $row['app_Id'] ?>" style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                        <div class="visited-card" id="visitCard-<?= $row['app_Id'] ?>"
+                            style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
                             <p><strong>Name:</strong> <?= htmlspecialchars($row['user_Name']) ?></p>
                             <p><strong>Gender:</strong> <?= htmlspecialchars($row['user_Gender']) ?></p>
                             <p><strong>Visit For:</strong> <?= htmlspecialchars($row['visit_for']) ?></p>
@@ -260,8 +264,16 @@ $data = $result->fetch_assoc();
                                 <strong>Time:</strong> <?= htmlspecialchars($row['app_time']) ?>
                             </p>
                             <p><strong>Visited At:</strong> <?= htmlspecialchars($row['Visit_Time']) ?></p>
-                            <button onclick="deleteVisitCard(<?= $row['app_Id'] ?>)" style="background:red; color:white;">Delete
-                                / Absent</button>
+
+                            <?php if (empty($row['report_exists'])): ?>
+                                <button onclick="deleteVisitCard(<?= $row['app_Id'] ?>)" style="background:red; color:white;">
+                                    Delete / Absent
+                                </button>
+                            <?php else: ?>
+                                <button disabled style="background:gray; color:white; cursor:not-allowed;">
+                                    Report Submitted
+                                </button>
+                            <?php endif; ?>
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -272,9 +284,8 @@ $data = $result->fetch_assoc();
                 $stmt->close();
                 $conn->close();
                 ?>
-
-
             </div>
+
 
         </div>
     </section>

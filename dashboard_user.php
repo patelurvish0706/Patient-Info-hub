@@ -32,7 +32,9 @@ $user = $result->fetch_assoc();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         #trackAppointment,
-        #bookAppointment {
+        #bookAppointment,
+        #reports,
+        #prescriptions {
             flex-direction: column;
         }
 
@@ -69,6 +71,15 @@ $user = $result->fetch_assoc();
             font-size: 16px;
             /* color: #000; */
             font-weight: 500;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            align-items: center;
+            gap: 10px;
         }
 
         #AllApps-content,
@@ -149,7 +160,7 @@ $user = $result->fetch_assoc();
                         <option value="male" <?= $user['user_Gender'] === 'Male' ? 'selected' : '' ?>>Male</option>
                         <option value="female" <?= $user['user_Gender'] === 'Female' ? 'selected' : '' ?>>Female</option>
                         <option value="other" <?= $user['user_Gender'] === 'Other' ? 'selected' : '' ?>>Other</option>
-                     </select>
+                    </select>
 
                     <label for="reg-user-phone">Phone:</label>
                     <input type="number" name="reg-user-phone" id="reg-user-phone"
@@ -331,10 +342,148 @@ $user = $result->fetch_assoc();
 
             <div id="reports">
                 <h2>Your Reports</h2>
+                <?php
+                include 'script/db_connection.php';
+
+                if (!isset($_SESSION['user_Id'])) {
+                    header("Location: manage.html");
+                    exit;
+                }
+
+                $user_Id = $_SESSION['user_Id'];
+
+                $sql = "SELECT 
+                        a.app_Id, a.app_date, a.app_time, a.visit_for, a.dept_id,
+                        d.dept_Name, d.dept_Phone,
+                        h.hospital_Name,
+                        ap.approval_Status,
+                        v.Visit_Status, v.Visit_Time,
+                        r.checkup_outcome, r.prescriptions, r.suggestion,
+                        doc.doct_Name
+                        FROM appointments a
+                        LEFT JOIN approval ap ON a.app_Id = ap.app_Id
+                        LEFT JOIN visit v ON a.app_Id = v.app_Id
+                        LEFT JOIN report r ON a.app_Id = r.app_Id
+                        LEFT JOIN departments d ON a.dept_id = d.dept_Id
+                        LEFT JOIN hospitals h ON d.hospital_Id = h.hospital_Id
+                        LEFT JOIN doctors doc ON doc.dept_Id = d.dept_Id AND doc.hospital_Id = h.hospital_Id
+                        WHERE a.user_Id = ?
+                        ORDER BY a.app_date DESC, a.app_time DESC";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_Id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                ?>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <form style="border:1px solid #ccc; box-shadow:none; width:50%;">
+                            <label>Department Name<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['dept_Name']) ?>"></label>
+
+                            <label>Department Phone<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['dept_Phone']) ?>"></label>
+
+                            <label>Hospital Name<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['hospital_Name']) ?>"></label>
+
+
+                            <label>Doctor Name<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['doct_Name']) ?>"></label>
+
+
+                            <label>Appointment Date<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['app_date']) ?>"></label>
+
+
+                            <label>Appointment Time<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['app_time']) ?>"></label>
+
+
+                            <label>Status
+                                <input type="text" disabled
+                                    value="<?= $row['Visit_Status'] ? htmlspecialchars($row['Visit_Status']) : htmlspecialchars($row['approval_Status'] ?? 'Pending') ?>">
+                            </label>
+
+                            <?php if ($row['Visit_Status'] === 'Visited'): ?>
+                                <label>Visit Time
+                                    <input type="text" disabled value="<?= htmlspecialchars($row['Visit_Time']) ?>">
+                                </label>
+                            <?php endif; ?>
+
+                            <label>Visit For<input type="text" disabled
+                                    value="<?= htmlspecialchars($row['visit_for']) ?>"></label>
+
+                            <?php if ($row['Visit_Status'] === 'Visited'): ?>
+                                <label>Checkup Outcome<textarea
+                                        disabled><?= htmlspecialchars($row['checkup_outcome']) ?></textarea></label>
+
+                                <label>Prescription<textarea
+                                        disabled><?= htmlspecialchars($row['prescriptions']) ?></textarea></label>
+
+                                <label>Suggestion<textarea disabled><?= htmlspecialchars($row['suggestion']) ?></textarea></label>
+                            <?php endif; ?>
+                        </form>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>No appointments or reports found.</p>
+                <?php endif; ?>
+
+                <?php
+                $stmt->close();
+                $conn->close();
+                ?>
+
             </div>
 
             <div id="prescriptions">
                 <h2>Your Prescriptions</h2>
+
+                <?php
+                include 'script/db_connection.php';
+
+                // Security check
+                if (!isset($_SESSION['user_Id'])) {
+                    die("Unauthorized access.");
+                }
+
+                $user_Id = $_SESSION['user_Id'];
+
+                // Fetch latest prescriptions and visit reasons
+                $sql = "SELECT a.app_Id, a.visit_for, a.app_date, a.app_time, r.prescriptions
+                        FROM appointments a
+                        LEFT JOIN report r ON a.app_Id = r.app_Id
+                        WHERE a.user_Id = ?
+                        ORDER BY a.app_date DESC, a.app_time DESC
+                    ";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $user_Id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                ?>
+
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <form>
+                            <label>Date:<input style="width: 50%;" type="text" disabled
+                                    value="<?= htmlspecialchars($row['app_date']) ?> at <?= htmlspecialchars($row['app_time']) ?>" /></label>
+
+                            <label>Visit For:<input style="width: 50%;" type="text" disabled
+                                    value="<?= htmlspecialchars($row['visit_for']) ?>" /></label>
+
+                            <label>Prescription:<textarea style="width: 50%;"
+                                    disabled><?= !empty($row['prescriptions']) ? nl2br(htmlspecialchars($row['prescriptions'])) : 'Not yet added.' ?></textarea></label>
+                        </form>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>No appointments found.</p>
+                <?php endif; ?>
+
+                <?php
+                $stmt->close();
+                $conn->close();
+                ?>
             </div>
 
         </div>
