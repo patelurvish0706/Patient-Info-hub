@@ -1,0 +1,33 @@
+Admin:
+* Register and login by valid email and password
+* Creates hospital environment and Update.(if not, prevent creating Departments and Doctors)
+* Creates Department and Doctors. (Provide Email and password to login them).
+* logout
+
+User:
+* Register and login by valid email and password
+* Book appointment. (Show all Departments from all hospitals if more than one admin creates it)
+* Check appointment request status : 
+    pending(not seen or action taken by Department)
+    approved(action taken by Department as approve)
+    reject(reject for some reason by Department)
+* show all appointment reports as list in more detailed.
+* show precescription if appointment accept and visit doctor.
+* logout
+
+Department:
+* only can login by email and password provided by admin.
+* show all users appointment list who request for that Department
+* approve and reject appointment request.
+* mark attendence(present) when user request approved and visit hospital.(Using this, all present patients info show to doctor)
+    undo the presence if mistakenly mark attendence. (Delete/Absent)
+    can not undo if doctor submitted report for them.
+* logout
+
+Doctor:
+* only can login by email and password provided by admin.
+* show all users which are in waiting area.
+* make report of them one by one. (add Checkup outcome, precescription, suggestions) - [this shows in Users precescription tab]
+* if require,can modify report.
+* logout
+
