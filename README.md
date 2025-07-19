@@ -1,5 +1,7 @@
 # 🏥 Patient Information Management System (PIMS)
 
+### 📸Screenshots: [https://github.com/patelurvish0706/Patient-Info-hub/blob/main/Screenshots.md]
+
 PIMS is a complete web-based healthcare management solution designed for hospitals to streamline appointment scheduling, doctor-patient interactions, nurse coordination, and report tracking — all while ensuring role-based access and data security.
 
 ## 🚀 Features
